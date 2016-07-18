@@ -10,62 +10,38 @@ import UIKit
 
 class GameBrain {
     
-    private var actions: Dictionary <String, Action> = [
-        "Up" : Action.Up,
-        "Down" : Action.Down,
-        "Left" : Action.Left,
-        "Right" : Action.Rigth
+    private var actions: Dictionary <String, (CGFloat, CGFloat)> = [
+        "Up" : (-10,0),
+        "Down" : (10,0),
+        "Left" : (0,-10),
+        "Right" : (0,10)
     ]
     
-    private enum Action {
-        case Up
-        case Down
-        case Left
-        case Rigth
-    }
-    
-    func performAction(buttonAction: String){
+    func setDirection(buttonAction: String){
         
         if let action = actions[buttonAction] {
-            switch action {
-            case .Up:
-                goUp()
-            case .Down:
-                goDown()
-            case .Left:
-                goLeft()
-            case .Rigth:
-                goRight()
-            }
+            direction = action
         }
     }
     
-    var headPoint: CGPoint!
+    var headPoint: CGPoint! {
+        
+        didSet{
+            print(headPoint)
+        }
+    }
+    var direction: (v: CGFloat, h: CGFloat)!
     
     func setDefaultPosition(defaultPosition: CGPoint){
         headPoint = defaultPosition
+        
+        setDirection("Up")
     }
     
-    private func goUp(){
+    func updateHead(){
         
-        headPoint.y -= 10
-    }
-    
-    private func goDown(){
+        headPoint.y += direction.v
         
-        headPoint.y += 10
-        
-    }
-    
-    private func goLeft(){
-        
-        headPoint.x -= 10
-        
-    }
-    
-    private func goRight(){
-        
-        headPoint.x += 10
-        
+        headPoint.x += direction.h
     }
 }
