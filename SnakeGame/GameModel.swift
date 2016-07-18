@@ -40,32 +40,32 @@ class GameBrain {
         }
     }
     
-    var circlePoint: CGPoint!
+    var headPoint: CGPoint!
     
     func setDefaultPosition(defaultPosition: CGPoint){
-        circlePoint = defaultPosition
+        headPoint = defaultPosition
     }
     
     private func goUp(){
         
-        circlePoint.y -= 10
+        headPoint.y -= 10
     }
     
     private func goDown(){
         
-        circlePoint.y += 10
+        headPoint.y += 10
         
     }
     
     private func goLeft(){
         
-        circlePoint.x -= 10
+        headPoint.x -= 10
         
     }
     
     private func goRight(){
         
-        circlePoint.x += 10
+        headPoint.x += 10
         
     }
 }
