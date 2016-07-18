@@ -6,7 +6,7 @@
 //  Copyright © 2016 Pavel Popov. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class GameBrain {
     
@@ -40,22 +40,32 @@ class GameBrain {
         }
     }
     
+    var circlePoint: CGPoint!
+    
+    func setDefaultPosition(defaultPosition: CGPoint){
+        circlePoint = defaultPosition
+    }
+    
     private func goUp(){
-        print("Up")
+        
+        circlePoint.y -= 10
     }
     
     private func goDown(){
-        print("Down")
-
+        
+        circlePoint.y += 10
+        
     }
     
     private func goLeft(){
-        print("Left")
-
+        
+        circlePoint.x -= 10
+        
     }
     
     private func goRight(){
-        print("Right")
-
+        
+        circlePoint.x += 10
+        
     }
 }
