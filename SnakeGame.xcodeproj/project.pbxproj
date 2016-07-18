@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A0997FD31D3CDB5D00AB2AC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */; };
-		A0997FD51D3CDB5D00AB2AC4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0997FD41D3CDB5D00AB2AC4 /* ViewController.swift */; };
 		A0997FD81D3CDB5D00AB2AC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0997FD61D3CDB5D00AB2AC4 /* Main.storyboard */; };
 		A0997FDA1D3CDB5D00AB2AC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0997FD91D3CDB5D00AB2AC4 /* Assets.xcassets */; };
 		A0997FDD1D3CDB5D00AB2AC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0997FDB1D3CDB5D00AB2AC4 /* LaunchScreen.storyboard */; };
@@ -17,7 +16,6 @@
 /* Begin PBXFileReference section */
 		A0997FCF1D3CDB5D00AB2AC4 /* SnakeGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnakeGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A0997FD41D3CDB5D00AB2AC4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A0997FD71D3CDB5D00AB2AC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A0997FD91D3CDB5D00AB2AC4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0997FDC1D3CDB5D00AB2AC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -54,14 +52,21 @@
 		A0997FD11D3CDB5D00AB2AC4 /* SnakeGame */ = {
 			isa = PBXGroup;
 			children = (
-				A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */,
-				A0997FD41D3CDB5D00AB2AC4 /* ViewController.swift */,
 				A0997FD61D3CDB5D00AB2AC4 /* Main.storyboard */,
+				A0997FE41D3CDE2D00AB2AC4 /* SupportingFiles */,
+			);
+			path = SnakeGame;
+			sourceTree = "<group>";
+		};
+		A0997FE41D3CDE2D00AB2AC4 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */,
 				A0997FD91D3CDB5D00AB2AC4 /* Assets.xcassets */,
 				A0997FDB1D3CDB5D00AB2AC4 /* LaunchScreen.storyboard */,
 				A0997FDE1D3CDB5D00AB2AC4 /* Info.plist */,
 			);
-			path = SnakeGame;
+			name = SupportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,7 +140,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0997FD51D3CDB5D00AB2AC4 /* ViewController.swift in Sources */,
 				A0997FD31D3CDB5D00AB2AC4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
