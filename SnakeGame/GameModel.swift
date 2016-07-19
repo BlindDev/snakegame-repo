@@ -10,27 +10,36 @@ import UIKit
 
 class GameBrain {
     
-    private var actions: Dictionary <String, (CGFloat, CGFloat)> = [
-        "Up" : (-10,0),
-        "Down" : (10,0),
-        "Left" : (0,-10),
-        "Right" : (0,10)
+    private var actions: Dictionary <String, (CGPoint)> = [
+        "Up" : CGPointMake(0, -10),
+        "Down" : CGPointMake(0,10),
+        "Left" : CGPointMake(-10,0),
+        "Right" : CGPointMake(10,0)
     ]
     
     func setDirection(buttonAction: String){
         
         if let action = actions[buttonAction] {
-            direction = action
+            
+            if (direction != nil) {
+                if !(direction.x + action.x == 0 && direction.y + action.y == 0) {
+                    direction = action
+                }
+            }else{
+                direction = action
+            }
+            
         }
     }
     
     var headPoint: CGPoint! {
         
         didSet{
-            print(headPoint)
+//            print(headPoint)
         }
     }
-    var direction: (v: CGFloat, h: CGFloat)!
+    
+    var direction: (CGPoint)!
     
     func setDefaultPosition(defaultPosition: CGPoint){
         headPoint = defaultPosition
@@ -40,8 +49,9 @@ class GameBrain {
     
     func updateHead(){
         
-        headPoint.y += direction.v
         
-        headPoint.x += direction.h
+        headPoint.x += direction.x
+        headPoint.y += direction.y
+        
     }
 }
