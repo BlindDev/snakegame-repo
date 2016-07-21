@@ -22,11 +22,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        brain.setDefaultPosition(view.center)
-        
-        gameFieldView.createHead()
-        
-        updateViewHead()
+        brain.setDefaultPosition(view.center, viewSize: gameFieldView.bounds.size)
         
         NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
     }
@@ -39,6 +35,6 @@ class GameViewController: UIViewController {
     }
     
     func updateViewHead(){
-        gameFieldView.renderHead(brain.headPoint)
+        gameFieldView.renderSegments(brain.segments)
     }
 }

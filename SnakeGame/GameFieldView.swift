@@ -10,19 +10,27 @@ import UIKit
 
 class GameFieldView: UIView {
     
-    private var head: UIView!
-
-    func createHead() {
-        
-        let frame = CGRect(x: 0, y: 0, width: 10, height: 10)
-        
-        head = UIView(frame: frame)
-        head.backgroundColor = UIColor.greenColor()
-        addSubview(head)
-    }
+    private var segmentViews: [UIView]! = []
     
-    func renderHead(position: CGPoint) {
-        
-        head.center = position
+    func renderSegments(segments: [GameSegment]){
+            
+        for i in 0..<segments.count {
+            
+            let segment = segments[i]
+            
+            var segmentView: UIView!
+            
+            if i == segmentViews.count {
+                
+                segmentView = UIView()
+                self.addSubview(segmentView)
+                segmentViews.append(segmentView)
+            }
+            
+            segmentView = segmentViews[i]
+            
+            segmentView.frame = segment.segmentRect()
+            segmentView.backgroundColor = segment.color
+        }
     }
 }
