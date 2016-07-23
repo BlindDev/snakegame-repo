@@ -60,16 +60,13 @@ class GameBrain {
         
         let newPoint = CGPoint(x: newX, y: newY)
 
-        let newSegment = GameSegment()
-        newSegment.isEaten = false
-        newSegment.color = UIColor.redColor()
-        newSegment.point = newPoint
+        let newSegment = GameSegment(point: newPoint, isEaten: false)
         segments.append(newSegment)
         
         print(newPoint)
     }
     
-    var direction: (CGPoint)!
+    private var direction: (CGPoint)!
     
     func setDefaultPosition(defaultPosition: CGPoint, viewSize: CGSize){
         
@@ -80,10 +77,7 @@ class GameBrain {
         
         setDirection("Up")
         
-        let headSegment = GameSegment()
-        headSegment.isEaten = true
-        headSegment.color = UIColor.greenColor()
-        headSegment.point = headPoint
+        let headSegment = GameSegment(point: headPoint, isEaten: true)
         segments.append(headSegment)
         
         createSegment()
@@ -115,18 +109,5 @@ class GameBrain {
         if isEaten {
             print("Eaten")
         }
-    }
-}
-
-class GameSegment {
-    var isEaten: Bool!
-    var color: UIColor!
-    var point: CGPoint!
-    
-    func segmentRect() -> CGRect {
-        
-        let side: CGFloat = 10
-        
-        return CGRect(x: point.x + side / 2, y: point.y + side / 2, width: side, height: side)
     }
 }

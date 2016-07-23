@@ -34,7 +34,7 @@ class GameViewController: UIViewController {
         updateViewHead()
     }
     
-    func updateViewHead(){
+    private func updateViewHead(){
         gameFieldView.renderSegments(brain.segments)
     }
 }
