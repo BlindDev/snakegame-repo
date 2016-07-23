@@ -16,11 +16,13 @@ class GameSegment {
     }
     var color: UIColor!
     var point: CGPoint!
+    var side: CGFloat!
     
-    init(point: CGPoint, isEaten: Bool){
+    init(point: CGPoint, isEaten: Bool, side: CGFloat){
         
         self.point = point
         self.isEaten = isEaten
+        self.side = side
         color = newColor()
     }
     
@@ -29,8 +31,6 @@ class GameSegment {
     }
     
     func segmentRect() -> CGRect {
-        
-        let side: CGFloat = 10
         
         return CGRect(x: point.x + side / 2, y: point.y + side / 2, width: side, height: side)
     }

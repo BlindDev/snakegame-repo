@@ -51,12 +51,12 @@ class GameFieldView: UIView {
         for border in borders{
             
             let borderView = UIView(frame: border)
+                        
             borderView.backgroundColor = UIColor.blackColor()
             self.addSubview(borderView)
         }
         
     }
-    
     
     override func drawRect(rect: CGRect) {
 

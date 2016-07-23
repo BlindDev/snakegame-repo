@@ -10,6 +10,8 @@ import UIKit
 
 class GameBrain {
     
+    private let side: CGFloat! = 10
+    
     private var actions: Dictionary <String, (CGPoint)> = [
         "Up" : CGPointMake(0,-10),
         "Down" : CGPointMake(0,10),
@@ -33,13 +35,22 @@ class GameBrain {
     
     private var headPoint: CGPoint! = CGPointZero
     
-    private var backViewSize: CGSize!
+    private var screen: CGSize!
+    
+    private var insets: CGPoint!{
+        get{
+            let horizontal = (screen.width % side) / 2
+            
+            let vertical = (screen.height % side) / 2
+            
+            return CGPoint(x: horizontal, y: vertical)
+        }
+    }
     
     private var bordersDictonary: [String:CGRect]!
     
     var borders: [CGRect]!{
         get{
-            
             var bordersArray: [CGRect] = []
             
             for border in bordersDictonary.values {
@@ -53,48 +64,50 @@ class GameBrain {
     
     private func createBorders(){
         
-        let screen = backViewSize
+        let width = screen.width - insets.x * 2
         
-        let borderWidth:CGFloat = 10
-        
-        let leftBorder = CGRect(x: 0, y: 0, width: borderWidth, height: screen.height)
+        let height = screen.height - insets.y * 2
+
+        let leftBorder = CGRect(x: insets.x, y: insets.y, width: side, height: height)
         
         bordersDictonary["Left"] = leftBorder
         
-        let rightBorder = CGRect(x: screen.width - borderWidth, y: 0, width: borderWidth, height: screen.height)
+        let rightBorder = CGRect(x: screen.width - insets.x - side, y: insets.y, width: side, height: height)
         
         bordersDictonary["Right"] = rightBorder
         
-        let horBorderWidth = screen.width - borderWidth * 2
-        
-        let topBorder = CGRect(x: borderWidth, y: 0, width: horBorderWidth, height: borderWidth)
+        let topBorder = CGRect(x: side + insets.x, y: insets.y, width: width, height: side)
         
         bordersDictonary["Top"] = topBorder
         
-        let botBorder = CGRect(x: borderWidth, y: screen.height - borderWidth, width: horBorderWidth, height: borderWidth)
+        let botBorder = CGRect(x: side + insets.x, y: screen.height - insets.y - side, width: width, height: side)
 
-        bordersDictonary["Bot"] = botBorder
-        
-        print(bordersDictonary)
+        bordersDictonary["Bot"] = botBorder        
     }
 
     var segments: [GameSegment]!
     
     private func createRandomSegment(){
         
-//        let randomMultiplierX = arc4random_uniform(screenWidth/10 - offsetX)
-//        
-//        let randomMultiplierY = arc4random_uniform(screenWidth/10 - offsetY)
-//        
-//        let newX: CGFloat = CGFloat(randomMultiplierX * step)
-//        let newY: CGFloat! = CGFloat(randomMultiplierY * step)
-//        
-//        let newPoint = CGPoint(x: newX, y: newY)
-//
-//        let newSegment = GameSegment(point: newPoint, isEaten: false)
-//        segments.append(newSegment)
-//        
-//        print(newPoint)
+        let side32 = side.convertToUInt32()
+        
+        let width32 = screen.width.convertToUInt32()
+        
+        let height32 = screen.height.convertToUInt32()
+        
+        let randomMultiX = arc4random_uniform(width32 / side32 - side32)
+        
+        let randomMultiY = arc4random_uniform(height32 / side32 - side32)
+        
+        let newX: CGFloat = CGFloat(randomMultiX) * side
+        let newY: CGFloat! = CGFloat(randomMultiY) * side
+        
+        let newPoint = CGPoint(x: newX, y: newY)
+
+        let newSegment = GameSegment(point: newPoint, isEaten: false, side: side)
+        segments.append(newSegment)
+        
+        print(newPoint)
     }
     
     private var direction: (CGPoint)!
@@ -103,7 +116,7 @@ class GameBrain {
         
         //prepareView
         bordersDictonary = [:]
-        backViewSize = viewSize
+        screen = viewSize
         createBorders()
         
         //prepare segments
@@ -116,7 +129,7 @@ class GameBrain {
         setDirection("Up")
         
         //creating the head
-        let headSegment = GameSegment(point: headPoint, isEaten: true)
+        let headSegment = GameSegment(point: headPoint, isEaten: true, side: side)
         segments.append(headSegment)
         
         //create segment to eat
@@ -136,7 +149,7 @@ class GameBrain {
         let headSegment = segments[0]
         headSegment.point = headPoint
         
-//        checkFood()
+        checkFood()
     }
     
     private func checkFood(){
@@ -149,5 +162,12 @@ class GameBrain {
         if isEaten {
             print("Eaten")
         }
+    }
+}
+
+extension CGFloat{
+    
+    func convertToUInt32() -> UInt32 {
+        return UInt32(self)
     }
 }
