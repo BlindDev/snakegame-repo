@@ -39,7 +39,7 @@ class GameViewController: UIViewController {
 
 extension GameViewController: DidDrawDelegate{
     func viewDidDraw() {
-        brain.setDefaultPosition(view.center, viewSize: gameFieldView.correctSize)
+        brain.setDefaults(gameFieldView.correctSize)
         gameFieldView.renderBorders(brain.borders)
         
         NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)

@@ -30,8 +30,8 @@ class GameSegment {
         return isEaten == true ? UIColor.greenColor() : UIColor.redColor()
     }
     
-    func segmentRect() -> CGRect {
+    func rect() -> CGRect {
         
-        return CGRect(x: point.x + side / 2, y: point.y + side / 2, width: side, height: side)
+        return CGRect(x: point.x, y: point.y, width: side, height: side)
     }
 }

@@ -38,8 +38,8 @@ class GameFieldView: UIView {
             }
             
             segmentView = segmentViews[i]
-            
-            segmentView.frame = segment.segmentRect()
+                        
+            segmentView.frame = segment.rect()
             segmentView.backgroundColor = segment.color
         }
     }
