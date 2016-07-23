@@ -8,9 +8,17 @@
 
 import UIKit
 
+protocol DidDrawDelegate {
+    func viewDidDraw()
+}
+
 class GameFieldView: UIView {
     
     private var segmentViews: [UIView]! = []
+    
+    private var borderViews: [UIView]!
+    
+    var delegate: DidDrawDelegate?
     
     var correctSize: CGSize!
     
@@ -36,8 +44,24 @@ class GameFieldView: UIView {
         }
     }
     
-    override func layoutSubviews() {
+    func renderBorders(borders: [CGRect]) {
+        
+        borderViews = []
+        
+        for border in borders{
+            
+            let borderView = UIView(frame: border)
+            borderView.backgroundColor = UIColor.blackColor()
+            self.addSubview(borderView)
+        }
+        
+    }
     
-        correctSize = self.bounds.size
+    
+    override func drawRect(rect: CGRect) {
+
+        correctSize = rect.size
+        
+        delegate?.viewDidDraw()
     }
 }

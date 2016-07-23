@@ -18,16 +18,12 @@ class GameViewController: UIViewController {
     
     private var brain = GameBrain()
     
-        
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        gameFieldView.setNeedsLayout()
-        gameFieldView.layoutIfNeeded()
-        brain.setDefaultPosition(view.center, viewSize: gameFieldView.correctSize)
         
-        NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
+        gameFieldView.delegate = self
     }
+    
 
 
     @objc private func movePoint() {
@@ -38,5 +34,14 @@ class GameViewController: UIViewController {
     
     private func updateViewHead(){
         gameFieldView.renderSegments(brain.segments)
+    }
+}
+
+extension GameViewController: DidDrawDelegate{
+    func viewDidDraw() {
+        brain.setDefaultPosition(view.center, viewSize: gameFieldView.correctSize)
+        gameFieldView.renderBorders(brain.borders)
+        
+        NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
     }
 }

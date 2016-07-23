@@ -35,10 +35,23 @@ class GameBrain {
     
     private var backViewSize: CGSize!
     
-    var borders: [String:CGRect]!
+    private var bordersDictonary: [String:CGRect]!
+    
+    var borders: [CGRect]!{
+        get{
+            
+            var bordersArray: [CGRect] = []
+            
+            for border in bordersDictonary.values {
+                
+               bordersArray.append(border)
+            }
+            
+            return bordersArray
+        }
+    }
     
     private func createBorders(){
-        borders = [:]
         
         let screen = backViewSize
         
@@ -46,23 +59,23 @@ class GameBrain {
         
         let leftBorder = CGRect(x: 0, y: 0, width: borderWidth, height: screen.height)
         
-        borders["Left"] = leftBorder
+        bordersDictonary["Left"] = leftBorder
         
         let rightBorder = CGRect(x: screen.width - borderWidth, y: 0, width: borderWidth, height: screen.height)
         
-        borders["Right"] = rightBorder
+        bordersDictonary["Right"] = rightBorder
         
         let horBorderWidth = screen.width - borderWidth * 2
         
         let topBorder = CGRect(x: borderWidth, y: 0, width: horBorderWidth, height: borderWidth)
         
-        borders["Top"] = topBorder
+        bordersDictonary["Top"] = topBorder
         
         let botBorder = CGRect(x: borderWidth, y: screen.height - borderWidth, width: horBorderWidth, height: borderWidth)
 
-        borders["Bot"] = botBorder
+        bordersDictonary["Bot"] = botBorder
         
-        print(borders)
+        print(bordersDictonary)
     }
 
     var segments: [GameSegment]!
@@ -89,6 +102,7 @@ class GameBrain {
     func setDefaultPosition(defaultPosition: CGPoint, viewSize: CGSize){
         
         //prepareView
+        bordersDictonary = [:]
         backViewSize = viewSize
         createBorders()
         
@@ -122,7 +136,7 @@ class GameBrain {
         let headSegment = segments[0]
         headSegment.point = headPoint
         
-        checkFood()
+//        checkFood()
     }
     
     private func checkFood(){
