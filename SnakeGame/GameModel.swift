@@ -33,7 +33,7 @@ class GameBrain {
         }
     }
     
-    private var headPoint: CGPoint! = CGPointZero
+    private var headPoint: CGPoint!
     
     private var screen: CGSize!
     
@@ -96,14 +96,29 @@ class GameBrain {
         
         let height32 = (fRect.height - side * 2).toUInt32()
         
-        let randomMultiX = arc4random_uniform(width32 / side32 - side.toUInt32())
+        let randomMultiX = arc4random_uniform(width32 / side32) + 1
         
-        let randomMultiY = arc4random_uniform(height32 / side32 - side.toUInt32())
+        let randomMultiY = arc4random_uniform(height32 / side32) + 1
         
         let newX: CGFloat = CGFloat(randomMultiX) * side + fRect.origin.x
         let newY: CGFloat! = CGFloat(randomMultiY) * side + fRect.origin.y
         
         return  CGPoint(x: newX, y: newY)
+    }
+    
+    private func centerPoint() -> CGPoint {
+        
+        let x = calculatedMultiplier(fRect.width) * side + fRect.origin.x
+        let y = calculatedMultiplier(fRect.height) * side + fRect.origin.y
+        
+        return CGPoint(x: x, y: y)
+    }
+    
+    private func calculatedMultiplier(value: CGFloat) -> CGFloat{
+        
+        let multiplier = value / side
+        
+        return floor(multiplier / 2)
     }
     
     private var direction: (CGPoint)!
@@ -118,7 +133,7 @@ class GameBrain {
         //prepare segments
         segments = []
         //main default point for the head
-        headPoint = randomPoint()
+        headPoint = centerPoint()
         
         //setting default direction
         setDirection("Up")
@@ -137,7 +152,14 @@ class GameBrain {
         headPoint.x += direction.x
         headPoint.y += direction.y
         
-        moveHead()
+        let outX = self.headPoint.x == fRect.origin.x || self.headPoint.x == fRect.origin.x - side + fRect.width
+        let outY = self.headPoint.y == fRect.origin.y || self.headPoint.y == fRect.origin.y - side + fRect.height
+        
+        if outX || outY {
+            headPoint = centerPoint()
+        }else{
+            moveHead()
+        }
     }
     
     private func moveHead() {
