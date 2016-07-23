@@ -12,6 +12,8 @@ class GameFieldView: UIView {
     
     private var segmentViews: [UIView]! = []
     
+    var correctSize: CGSize!
+    
     func renderSegments(segments: [GameSegment]){
             
         for i in 0..<segments.count {
@@ -32,5 +34,10 @@ class GameFieldView: UIView {
             segmentView.frame = segment.segmentRect()
             segmentView.backgroundColor = segment.color
         }
+    }
+    
+    override func layoutSubviews() {
+    
+        correctSize = self.bounds.size
     }
 }

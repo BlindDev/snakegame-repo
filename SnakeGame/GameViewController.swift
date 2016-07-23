@@ -22,7 +22,9 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        brain.setDefaultPosition(view.center, viewSize: gameFieldView.bounds.size)
+        gameFieldView.setNeedsLayout()
+        gameFieldView.layoutIfNeeded()
+        brain.setDefaultPosition(view.center, viewSize: gameFieldView.correctSize)
         
         NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
     }
