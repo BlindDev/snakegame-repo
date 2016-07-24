@@ -61,7 +61,7 @@ class GameBrain {
     }
     
     private func createBorders(){
-
+        
         let verticalCount = Int(fRect.height / side)
         //left border
         bordersCreationMethod(fRect.origin, direction: CGPoint(x: 0, y: side), count: verticalCount)
@@ -78,7 +78,7 @@ class GameBrain {
         //bot border
         let botY = CGPoint(x: horStartPoint.x, y: screen.height - fRect.origin.y - side)
         bordersCreationMethod(botY, direction: CGPoint(x: side, y: 0), count: horizontalCount)
-
+        
     }
     
     private func bordersCreationMethod(startP: CGPoint, direction: CGPoint, count: Int) {
@@ -94,7 +94,7 @@ class GameBrain {
             cyclePoint = borderPoint
         }
     }
-
+    
     
     private func randomPoint() -> CGPoint {
         
@@ -171,14 +171,30 @@ class GameBrain {
             //change it for the death
             setDefaults()
         }else{
-           moveHead()
+            moveHead()
         }
     }
     
     private func moveHead() {
         
-        let headSegment = snake[0]
-        headSegment.point = headPoint
+        var startPoint = headPoint
+        
+        for segment in snake {
+            
+            let currentPoint = segment.point
+            
+            if segment.isEaten == true {
+                
+                segment.point = startPoint
+                
+                startPoint = currentPoint
+            }
+            
+            if !segment.isEaten && startPoint == segment.point{
+                
+                segment.isEaten = true
+            }
+        }
         
         checkFood()
     }
@@ -186,12 +202,14 @@ class GameBrain {
     private func checkFood(){
         let headRect = snake[0].rect()
         
-        let redSegment = snake[1].rect()//just check, can make an error
+        guard let lastSegment = snake.last else {
+            return
+        }
         
-        let isEaten = CGRectIntersectsRect(headRect, redSegment)
+        let isEaten = CGRectIntersectsRect(headRect, lastSegment.rect())
         
         if isEaten {
-            print("Eaten")
+            newSegment()
         }
     }
 }
