@@ -66,6 +66,34 @@ class GameBrain {
         }
     }
     
+    func setDefaults() {
+        
+        //prepareView
+        borders = []
+        createBorders()
+        
+        //prepare segments
+        snake = []
+        //main default point for the head
+        headPoint = centerPoint()
+        
+        //setting default direction
+        setDirection("Up")
+        
+        //creating the head
+        snake.append(createHead())
+        snake.append(createHead())
+        snake.append(createHead())
+        
+        //create segment to eat
+        food = newSegment()
+    }
+    
+    init(viewSize: CGSize){
+        screen = viewSize
+        setDefaults()
+    }
+    
     private func newSegment() -> SnakeSegment {
         return SnakeSegment(point: randomPoint(), side: side)
     }
@@ -144,37 +172,7 @@ class GameBrain {
     private func createHead() -> SnakeSegment {
         let headSegment = SnakeSegment(point: headPoint, side: side)
         headSegment.isEaten = true
-        headSegment.isHead = true
         return headSegment
-    }
-    
-    func setDefaults() {
-        
-        //prepareView
-        borders = []
-        createBorders()
-        
-        //prepare segments
-        snake = []
-        //main default point for the head
-        headPoint = centerPoint()
-        
-        //setting default direction
-        setDirection("Up")
-        
-        //creating the head
-        snake.append(createHead())
-        snake.append(createHead())
-        snake.append(createHead())
-
-        
-        //create segment to eat
-        food = newSegment()
-    }
-    
-    init(viewSize: CGSize){
-        screen = viewSize
-        setDefaults()
     }
     
     func updateHead(){
@@ -184,9 +182,9 @@ class GameBrain {
         
         for border in borders {
             
-            if border.rect().contains(headPoint) {
-//                border.isEaten = true
+            if border.rect.contains(headPoint) {
                 
+                print("Dead")
                 //add the death
             }
         }
@@ -196,21 +194,9 @@ class GameBrain {
     
     private func moveHead() {
         
-        guard let head = snake.first else{
-            return
-        }
-        
-        head.isHead = false
-        
         snake.insert(createHead(), atIndex: 0)
         
         snake.removeLast()
-        
-        guard let tail = snake.last else{
-            return
-        }
-        
-        tail.isTail = true
         
         checkFood()
     }
@@ -220,13 +206,11 @@ class GameBrain {
             return
         }
         
-        let isEaten = CGRectIntersectsRect(head.rect(), food.rect())
+        let isEaten = CGRectIntersectsRect(head.rect, food.rect)
         
         if isEaten {
             
-            food.isHead = true
-            head.isHead = false
-            snake.append(food)
+            snake.insert(food, atIndex: 0)
             
             food = newSegment()
         }

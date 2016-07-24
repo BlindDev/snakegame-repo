@@ -9,68 +9,43 @@
 import UIKit
 
 class GameSegment {
-    var isEaten: Bool!{
-        didSet{
-            isEatenAction()
-        }
-    }
     
     var color: UIColor!
     var point: CGPoint!
     var side: CGFloat!
     
+    var rect: CGRect {
+        get{
+            return CGRect(x: point.x, y: point.y, width: side, height: side)
+        }
+    }
+    
     init(point: CGPoint, side: CGFloat){
         
         self.point = point
         self.side = side
-        self.isEaten = false
-        isEatenAction()
-    }
-    
-    private func isEatenAction(){}
-    
-    func rect() -> CGRect {
-        
-        return CGRect(x: point.x, y: point.y, width: side, height: side)
     }
 }
 
 class SnakeSegment: GameSegment {
-    var isHead: Bool!{
+    
+    var isEaten: Bool! {
         didSet{
-            head()
+            color = isEaten == true ? UIColor.greenColor().colorWithAlphaComponent(0.8) : UIColor.redColor()
         }
-    }
-    
-    var isTail: Bool!{
-        didSet{
-            tail()
-        }
-    }
-    
-    private func head(){
-        color = isHead == true ? UIColor.blueColor() : UIColor.greenColor()
-    }
-    
-    private func tail(){
-        color = isTail == true ? UIColor.grayColor() : UIColor.greenColor()
     }
     
     override init(point: CGPoint, side: CGFloat) {
         super.init(point: point, side: side)
-    }
-    
-    override func isEatenAction() {
-        color = isEaten == true ? UIColor.greenColor() : UIColor.redColor()
+        
+        color = UIColor.redColor()
     }
 }
 
 class Border: GameSegment {
     override init(point: CGPoint, side: CGFloat) {
         super.init(point: point, side: side)
-    }
-    
-    private override func isEatenAction() {
-        color = isEaten == true ? UIColor.redColor() : UIColor.blackColor()
+        
+        color = UIColor.blackColor()
     }
 }

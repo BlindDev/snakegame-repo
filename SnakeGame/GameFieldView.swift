@@ -39,7 +39,7 @@ class GameFieldView: UIView {
             
             segmentView = segmentViews[i]
                         
-            segmentView.frame = segment.rect()
+            segmentView.frame = segment.rect
             segmentView.backgroundColor = segment.color
         }
     }
@@ -50,7 +50,7 @@ class GameFieldView: UIView {
         
         for border in borders{
             
-            let borderView = UIView(frame: border.rect())
+            let borderView = UIView(frame: border.rect)
                         
             borderView.backgroundColor = border.color
             self.addSubview(borderView)
