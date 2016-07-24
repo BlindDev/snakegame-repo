@@ -8,33 +8,69 @@
 
 import UIKit
 
-enum SegmentTypes{
-    case Head
-    case Tail
-    case Middle
-    case Food
-    case Border
-}
-
 class GameSegment {
-    var isEaten: Bool!
-    
-    var rect: CGRect!{
-        get{
-            return CGRect(x: point.x, y: point.y, width: side, height: side)
+    var isEaten: Bool!{
+        didSet{
+            isEatenAction()
         }
     }
     
-    var type: SegmentTypes!
+    var color: UIColor!
+    var point: CGPoint!
+    var side: CGFloat!
     
-    private var point: CGPoint!
-    private var side: CGFloat!
-    
-    init(point: CGPoint, side: CGFloat, type: SegmentTypes){
+    init(point: CGPoint, side: CGFloat){
         
         self.point = point
         self.side = side
-        self.type = type
         self.isEaten = false
+        isEatenAction()
+    }
+    
+    private func isEatenAction(){}
+    
+    func rect() -> CGRect {
+        
+        return CGRect(x: point.x, y: point.y, width: side, height: side)
+    }
+}
+
+class SnakeSegment: GameSegment {
+    var isHead: Bool!{
+        didSet{
+            head()
+        }
+    }
+    
+    var isTail: Bool!{
+        didSet{
+            tail()
+        }
+    }
+    
+    private func head(){
+        color = isHead == true ? UIColor.blueColor() : UIColor.greenColor()
+    }
+    
+    private func tail(){
+        color = isTail == true ? UIColor.grayColor() : UIColor.greenColor()
+    }
+    
+    override init(point: CGPoint, side: CGFloat) {
+        super.init(point: point, side: side)
+    }
+    
+    override func isEatenAction() {
+        color = isEaten == true ? UIColor.greenColor() : UIColor.redColor()
+    }
+}
+
+class Border: GameSegment {
+    override init(point: CGPoint, side: CGFloat) {
+        super.init(point: point, side: side)
+    }
+    
+    private override func isEatenAction() {
+        color = isEaten == true ? UIColor.redColor() : UIColor.blackColor()
     }
 }

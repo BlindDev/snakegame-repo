@@ -14,9 +14,9 @@ protocol DidDrawDelegate {
 
 class GameFieldView: UIView {
     
-    private var segmentViews: [SegmentView]! = []
+    private var segmentViews: [UIView]! = []
     
-    private var borderViews: [SegmentView]!
+    private var borderViews: [UIView]!
     
     var delegate: DidDrawDelegate?
     
@@ -28,18 +28,19 @@ class GameFieldView: UIView {
             
             let segment = segments[i]
             
-            var segmentView: SegmentView!
+            var segmentView: UIView!
             
             if i == segmentViews.count {
                 
-                segmentView = SegmentView(frame: segment.rect, type: segment.type)
+                segmentView = UIView()
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
-            }else{
-                segmentView = segmentViews[i]
-                segmentView.frame = segment.rect
             }
             
+            segmentView = segmentViews[i]
+                        
+            segmentView.frame = segment.rect()
+            segmentView.backgroundColor = segment.color
         }
     }
     
@@ -49,7 +50,9 @@ class GameFieldView: UIView {
         
         for border in borders{
             
-            let borderView = SegmentView(frame: border.rect, type: border.type)                        
+            let borderView = UIView(frame: border.rect())
+                        
+            borderView.backgroundColor = border.color
             self.addSubview(borderView)
         }
         
@@ -60,40 +63,5 @@ class GameFieldView: UIView {
         correctSize = rect.size
         
         delegate?.viewDidDraw()
-    }
-}
-
-class SegmentView: UIView {
-    
-    var type: SegmentTypes! {
-        didSet{
-            setNeedsDisplay()
-        }
-    }
-    
-    init(frame: CGRect, type: SegmentTypes) {
-        super.init(frame: frame)
-        
-        self.type = type
-    }
-    
-    override func drawRect(rect: CGRect) {
-        
-        var path: UIBezierPath!
-        
-        switch self.type {
-        case .Head:
-            path = headPath()
-        default:
-            <#code#>
-        }
-    }
-    
-    private func headPath() -> UIBezierPath {
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
