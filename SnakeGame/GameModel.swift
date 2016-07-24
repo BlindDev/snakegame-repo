@@ -210,6 +210,8 @@ class GameBrain {
         
         if isEaten {
             
+            food.isEaten = true
+            
             snake.insert(food, atIndex: 0)
             
             food = newSegment()

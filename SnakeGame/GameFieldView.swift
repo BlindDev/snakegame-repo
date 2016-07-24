@@ -16,8 +16,6 @@ class GameFieldView: UIView {
     
     private var segmentViews: [UIView]! = []
     
-    private var borderViews: [UIView]!
-    
     var delegate: DidDrawDelegate?
     
     var correctSize: CGSize!
@@ -44,16 +42,11 @@ class GameFieldView: UIView {
         }
     }
     
-    func renderBorders(borders: [GameSegment]) {
-        
-        borderViews = []
-        
+    func renderBorders(borders: [Border]) {
+                
         for border in borders{
             
-            let borderView = UIView(frame: border.rect)
-                        
-            borderView.backgroundColor = border.color
-            self.addSubview(borderView)
+            self.layer.addSublayer(border.layer)
         }
         
     }

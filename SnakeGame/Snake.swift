@@ -10,9 +10,10 @@ import UIKit
 
 class GameSegment {
     
+    private var point: CGPoint!
+    private var side: CGFloat!
+    
     var color: UIColor!
-    var point: CGPoint!
-    var side: CGFloat!
     
     var rect: CGRect {
         get{
@@ -43,9 +44,23 @@ class SnakeSegment: GameSegment {
 }
 
 class Border: GameSegment {
+    
+    var layer: CAShapeLayer!
+    
     override init(point: CGPoint, side: CGFloat) {
         super.init(point: point, side: side)
+                
+        layer = CAShapeLayer()
+        layer.path = rectLayer().CGPath
+        layer.fillColor = UIColor.blackColor().CGColor
+    }
+    
+    private func rectLayer() -> UIBezierPath {
         
-        color = UIColor.blackColor()
+        let fillRect = CGRect(x: rect.minX + 1, y: rect.minY + 1, width: side-2, height: side - 2)
+        
+        let path = UIBezierPath(roundedRect: fillRect, cornerRadius: side/5)
+        
+        return path
     }
 }
