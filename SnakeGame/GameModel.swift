@@ -53,11 +53,21 @@ class GameBrain {
     
     var borders: [Border]!
     
-    var snake: [SnakeSegment]!
+    private var snake: [SnakeSegment]!
     
-    private func newSegment(){
-        let newSegment = SnakeSegment(point: randomPoint(), side: side)
-        snake.append(newSegment)
+    private var food: SnakeSegment!
+    
+    var segments: [SnakeSegment]! {
+        get{
+            
+            var array = snake
+            array.append(food)
+            return array
+        }
+    }
+    
+    private func newSegment() -> SnakeSegment {
+        return SnakeSegment(point: randomPoint(), side: side)
     }
     
     private func createBorders(){
@@ -131,6 +141,13 @@ class GameBrain {
     
     private var direction: (CGPoint)!
     
+    private func createHead() -> SnakeSegment {
+        let headSegment = SnakeSegment(point: headPoint, side: side)
+        headSegment.isEaten = true
+        headSegment.isHead = true
+        return headSegment
+    }
+    
     func setDefaults() {
         
         //prepareView
@@ -146,12 +163,10 @@ class GameBrain {
         setDirection("Up")
         
         //creating the head
-        let headSegment = SnakeSegment(point: headPoint, side: side)
-        headSegment.isEaten = true
-        snake.append(headSegment)
+        snake.append(createHead())
         
         //create segment to eat
-        newSegment()
+        food = newSegment()
     }
     
     init(viewSize: CGSize){
@@ -167,7 +182,9 @@ class GameBrain {
         for border in borders {
             
             if border.rect().contains(headPoint) {
-                print("U dead")
+//                border.isEaten = true
+                
+                //add the death
             }
         }
         
@@ -176,39 +193,39 @@ class GameBrain {
     
     private func moveHead() {
         
-        var startPoint = headPoint
-        
-        for segment in snake {
-            
-            let currentPoint = segment.point
-            
-            if segment.isEaten == true {
-                
-                segment.point = startPoint
-                
-                startPoint = currentPoint
-            }
-            
-            if !segment.isEaten && startPoint == segment.point{
-                
-                segment.isEaten = true
-            }
+        guard let head = snake.first else{
+            return
         }
+        
+        head.isHead = false
+        
+        snake.insert(createHead(), atIndex: 0)
+        
+        snake.removeLast()
+        
+        guard let tail = snake.last else{
+            return
+        }
+        
+        tail.isTail = true
         
         checkFood()
     }
     
     private func checkFood(){
-        let headRect = snake[0].rect()
-        
-        guard let lastSegment = snake.last else {
+        guard let head = snake.first else{
             return
         }
         
-        let isEaten = CGRectIntersectsRect(headRect, lastSegment.rect())
+        let isEaten = CGRectIntersectsRect(head.rect(), food.rect())
         
         if isEaten {
-            newSegment()
+            
+            food.isHead = true
+            head.isHead = false
+            snake.append(food)
+            
+            food = newSegment()
         }
     }
 }

@@ -36,6 +36,26 @@ class GameSegment {
 }
 
 class SnakeSegment: GameSegment {
+    var isHead: Bool!{
+        didSet{
+            head()
+        }
+    }
+    
+    var isTail: Bool!{
+        didSet{
+            tail()
+        }
+    }
+    
+    private func head(){
+        color = isHead == true ? UIColor.blueColor() : UIColor.greenColor()
+    }
+    
+    private func tail(){
+        color = isTail == true ? UIColor.grayColor() : UIColor.greenColor()
+    }
+    
     override init(point: CGPoint, side: CGFloat) {
         super.init(point: point, side: side)
     }
