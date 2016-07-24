@@ -44,15 +44,15 @@ class GameFieldView: UIView {
         }
     }
     
-    func renderBorders(borders: [CGRect]) {
+    func renderBorders(borders: [GameSegment]) {
         
         borderViews = []
         
         for border in borders{
             
-            let borderView = UIView(frame: border)
+            let borderView = UIView(frame: border.rect())
                         
-            borderView.backgroundColor = UIColor.blackColor()
+            borderView.backgroundColor = border.color
             self.addSubview(borderView)
         }
         

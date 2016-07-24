@@ -51,40 +51,50 @@ class GameBrain {
         }
     }
     
-    private var bordersDictonary: [String:CGRect]!
+    var borders: [Border]!
     
-    var borders: [CGRect]!{
-        get{
-            var bordersArray: [CGRect] = []
-            
-            for border in bordersDictonary.values {
-                
-               bordersArray.append(border)
-            }
-            return bordersArray
-        }
+    var snake: [SnakeSegment]!
+    
+    private func newSegment(){
+        let newSegment = SnakeSegment(point: randomPoint(), side: side)
+        snake.append(newSegment)
     }
     
     private func createBorders(){
 
-        let leftBorder = CGRect(x: fRect.origin.x, y: fRect.origin.y, width: side, height: fRect.height)
+        let verticalCount = Int(fRect.height / side)
+        //left border
+        bordersCreationMethod(fRect.origin, direction: CGPoint(x: 0, y: side), count: verticalCount)
         
-        bordersDictonary["Left"] = leftBorder
+        //right border
+        let rightX = screen.width - fRect.origin.x - side
+        bordersCreationMethod(CGPoint(x: rightX, y: fRect.origin.y), direction: CGPoint(x: 0, y: side), count: verticalCount)
         
-        let rightBorder = CGRect(x: screen.width - fRect.origin.x - side, y: fRect.origin.y, width: side, height: fRect.height)
+        let horizontalCount = Int(fRect.width / side) - 2
+        //top border
+        let horStartPoint = CGPoint(x: fRect.origin.x + side, y: fRect.origin.y)
+        bordersCreationMethod(horStartPoint, direction: CGPoint(x: side, y: 0), count: horizontalCount)
         
-        bordersDictonary["Right"] = rightBorder
-        
-        let topBorder = CGRect(x: side + fRect.origin.x, y: fRect.origin.y, width: fRect.width, height: side)
-        
-        bordersDictonary["Top"] = topBorder
-        
-        let botBorder = CGRect(x: side + fRect.origin.x, y: screen.height - fRect.origin.y - side, width: fRect.width, height: side)
+        //bot border
+        let botY = CGPoint(x: horStartPoint.x, y: screen.height - fRect.origin.y - side)
+        bordersCreationMethod(botY, direction: CGPoint(x: side, y: 0), count: horizontalCount)
 
-        bordersDictonary["Bot"] = botBorder        
+    }
+    
+    private func bordersCreationMethod(startP: CGPoint, direction: CGPoint, count: Int) {
+        
+        let startBorder = Border(point: startP, side: side)
+        borders.append(startBorder)
+        
+        var cyclePoint = startP
+        for _ in 1..<count {
+            let borderPoint = CGPoint(x: cyclePoint.x + direction.x, y: cyclePoint.y + direction.y)
+            let newBorder = Border(point: borderPoint, side: side)
+            borders.append(newBorder)
+            cyclePoint = borderPoint
+        }
     }
 
-    var segments: [GameSegment]!
     
     private func randomPoint() -> CGPoint {
         
@@ -121,15 +131,14 @@ class GameBrain {
     
     private var direction: (CGPoint)!
     
-    func setDefaults(viewSize: CGSize){
+    func setDefaults() {
         
         //prepareView
-        bordersDictonary = [:]
-        screen = viewSize
+        borders = []
         createBorders()
         
         //prepare segments
-        segments = []
+        snake = []
         //main default point for the head
         headPoint = centerPoint()
         
@@ -137,12 +146,17 @@ class GameBrain {
         setDirection("Up")
         
         //creating the head
-        let headSegment = GameSegment(point: headPoint, isEaten: true, side: side)
-        segments.append(headSegment)
+        let headSegment = SnakeSegment(point: headPoint, side: side)
+        headSegment.isEaten = true
+        snake.append(headSegment)
         
         //create segment to eat
-        let newSegment = GameSegment(point: randomPoint(), isEaten: false, side: side)
-        segments.append(newSegment)
+        newSegment()
+    }
+    
+    init(viewSize: CGSize){
+        screen = viewSize
+        setDefaults()
     }
     
     func updateHead(){
@@ -154,25 +168,25 @@ class GameBrain {
         let outY = self.headPoint.y == fRect.origin.y || self.headPoint.y == fRect.origin.y - side + fRect.height
         
         if outX || outY {
-            headPoint = centerPoint()
-        }else{
             //change it for the death
-            setDefaults(screen)
+            setDefaults()
+        }else{
+           moveHead()
         }
     }
     
     private func moveHead() {
         
-        let headSegment = segments[0]
+        let headSegment = snake[0]
         headSegment.point = headPoint
         
         checkFood()
     }
     
     private func checkFood(){
-        let headRect = segments[0].rect()
+        let headRect = snake[0].rect()
         
-        let redSegment = segments[1].rect()//just check, can make an error
+        let redSegment = snake[1].rect()//just check, can make an error
         
         let isEaten = CGRectIntersectsRect(headRect, redSegment)
         

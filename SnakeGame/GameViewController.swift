@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
         brain.setDirection(sender.currentTitle!)
     }
     
-    private var brain = GameBrain()
+    private var brain: GameBrain!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,13 +33,13 @@ class GameViewController: UIViewController {
     }
     
     private func updateViewHead(){
-        gameFieldView.renderSegments(brain.segments)
+        gameFieldView.renderSegments(brain.snake)
     }
 }
 
 extension GameViewController: DidDrawDelegate{
     func viewDidDraw() {
-        brain.setDefaults(gameFieldView.correctSize)
+        brain = GameBrain(viewSize: gameFieldView.correctSize)
         gameFieldView.renderBorders(brain.borders)
         
         NSTimer.scheduledTimerWithTimeInterval(1.00,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
