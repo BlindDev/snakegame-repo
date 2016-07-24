@@ -164,15 +164,14 @@ class GameBrain {
         headPoint.x += direction.x
         headPoint.y += direction.y
         
-        let outX = self.headPoint.x == fRect.origin.x || self.headPoint.x == fRect.origin.x - side + fRect.width
-        let outY = self.headPoint.y == fRect.origin.y || self.headPoint.y == fRect.origin.y - side + fRect.height
-        
-        if outX || outY {
-            //change it for the death
-            setDefaults()
-        }else{
-            moveHead()
+        for border in borders {
+            
+            if border.rect().contains(headPoint) {
+                print("U dead")
+            }
         }
+        
+        moveHead()
     }
     
     private func moveHead() {
