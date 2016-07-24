@@ -81,9 +81,7 @@ class GameBrain {
         
         let botBorder = CGRect(x: side + fRect.origin.x, y: screen.height - fRect.origin.y - side, width: fRect.width, height: side)
 
-        bordersDictonary["Bot"] = botBorder
-        
-        print(bordersDictonary)
+        bordersDictonary["Bot"] = botBorder        
     }
 
     var segments: [GameSegment]!
@@ -158,7 +156,8 @@ class GameBrain {
         if outX || outY {
             headPoint = centerPoint()
         }else{
-            moveHead()
+            //change it for the death
+            setDefaults(screen)
         }
     }
     
