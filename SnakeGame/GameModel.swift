@@ -12,6 +12,8 @@ class GameBrain {
     
     private let side: CGFloat! = 10
     
+    private var direction: (CGPoint)!
+
     private var actions: Dictionary <String, (CGPoint)> = [
         "Up" : CGPointMake(0,-10),
         "Down" : CGPointMake(0,10),
@@ -51,13 +53,13 @@ class GameBrain {
         }
     }
     
-    var borders: [Border]!
+    var borders: [GameSegment]!
     
-    private var snake: [SnakeSegment]!
+    private var snake: [GameSegment]!
     
-    private var food: SnakeSegment!
+    private var food: GameSegment!
     
-    var segments: [SnakeSegment]! {
+    var segments: [GameSegment]! {
         get{
             
             var array = snake
@@ -81,9 +83,9 @@ class GameBrain {
         setDirection("Up")
         
         //creating the head
-        snake.append(createHead())
-        snake.append(createHead())
-        snake.append(createHead())
+        snake.append(headSegment())
+        snake.append(headSegment())
+        snake.append(headSegment())
         
         //create segment to eat
         food = newSegment()
@@ -92,10 +94,6 @@ class GameBrain {
     init(viewSize: CGSize){
         screen = viewSize
         setDefaults()
-    }
-    
-    private func newSegment() -> SnakeSegment {
-        return SnakeSegment(point: randomPoint(), side: side)
     }
     
     private func createBorders(){
@@ -121,18 +119,33 @@ class GameBrain {
     
     private func bordersCreationMethod(startP: CGPoint, direction: CGPoint, count: Int) {
         
-        let startBorder = Border(point: startP, side: side)
+        let startBorder = GameSegment(point: startP, side: side)
+        startBorder.type = SegmentType.Border
         borders.append(startBorder)
         
         var cyclePoint = startP
         for _ in 1..<count {
             let borderPoint = CGPoint(x: cyclePoint.x + direction.x, y: cyclePoint.y + direction.y)
-            let newBorder = Border(point: borderPoint, side: side)
+            let newBorder = GameSegment(point: borderPoint, side: side)
+            newBorder.type = SegmentType.Border
             borders.append(newBorder)
             cyclePoint = borderPoint
         }
     }
     
+    private func headSegment() -> GameSegment {
+        let segment = GameSegment(point: headPoint, side: side)
+        segment.type = SegmentType.Middle
+        return segment
+    }
+    
+    private func newSegment() -> GameSegment {
+        let segment = GameSegment(point: randomPoint(), side: side)
+        
+        segment.type = SegmentType.Food
+
+        return segment
+    }
     
     private func randomPoint() -> CGPoint {
         
@@ -167,13 +180,6 @@ class GameBrain {
         return floor(multiplier / 2)
     }
     
-    private var direction: (CGPoint)!
-    
-    private func createHead() -> SnakeSegment {
-        let headSegment = SnakeSegment(point: headPoint, side: side)
-        headSegment.isEaten = true
-        return headSegment
-    }
     
     func updateHead(){
         
@@ -182,7 +188,7 @@ class GameBrain {
         
         for border in borders {
             
-            if border.rect.contains(headPoint) {
+            if border.parameters.rect.contains(headPoint) {
                 
                 print("Dead")
                 //add the death
@@ -194,9 +200,21 @@ class GameBrain {
     
     private func moveHead() {
         
-        snake.insert(createHead(), atIndex: 0)
+        guard let first = snake.first else{
+            return
+        }
+        
+        first.type = SegmentType.Middle
+        
+        let head = headSegment()
+        head.type = SegmentType.Head
+        snake.insert(head, atIndex: 0)
         
         snake.removeLast()
+        guard let last = snake.last else{
+            return
+        }
+        last.type = SegmentType.Tail
         
         checkFood()
     }
@@ -206,11 +224,11 @@ class GameBrain {
             return
         }
         
-        let isEaten = CGRectIntersectsRect(head.rect, food.rect)
+        let isEaten = CGRectIntersectsRect(head.parameters.rect, food.parameters.rect)
         
         if isEaten {
             
-            food.isEaten = true
+//            food.isEaten = true
             
             snake.insert(food, atIndex: 0)
             

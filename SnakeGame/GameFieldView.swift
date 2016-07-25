@@ -14,7 +14,7 @@ protocol DidDrawDelegate {
 
 class GameFieldView: UIView {
     
-    private var segmentViews: [UIView]! = []
+    private var segmentViews: [SegmentView]! = []
     
     var delegate: DidDrawDelegate?
     
@@ -26,27 +26,29 @@ class GameFieldView: UIView {
             
             let segment = segments[i]
             
-            var segmentView: UIView!
+            var segmentView: SegmentView!
             
             if i == segmentViews.count {
                 
-                segmentView = UIView()
+                let params = segment.parameters
+                segmentView = SegmentView(parameters: params)
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
+            }else{
+                segmentView = segmentViews[i]
+                
+                segmentView.parameters = segment.parameters
             }
-            
-            segmentView = segmentViews[i]
-                        
-            segmentView.frame = segment.rect
-            segmentView.backgroundColor = segment.color
         }
     }
     
-    func renderBorders(borders: [Border]) {
+    func renderBorders(borders: [GameSegment]) {
                 
         for border in borders{
             
-            self.layer.addSublayer(border.layer)
+            let params = border.parameters
+            let view = SegmentView(parameters: params)
+            addSubview(view)
         }
         
     }
@@ -58,3 +60,41 @@ class GameFieldView: UIView {
         delegate?.viewDidDraw()
     }
 }
+
+class SegmentView: UIView {
+    
+    var parameters: SegmentParameters!{
+        didSet{
+            frame = parameters.rect
+            setNeedsDisplay()
+        }
+    }
+    //set needs display
+    init(parameters: SegmentParameters) {
+        super.init(frame: parameters.rect)
+        
+        backgroundColor = UIColor.clearColor()
+        self.parameters = parameters
+    }
+    
+    
+    override func drawRect(rect: CGRect) {
+        let path = parameters.path()
+        parameters.color().setFill()
+        path.fill()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

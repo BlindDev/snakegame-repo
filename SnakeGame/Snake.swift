@@ -8,14 +8,63 @@
 
 import UIKit
 
+
+enum SegmentType{
+    case Head
+    case Tail
+    case Border
+    case Middle
+    case Food
+}
+
+struct SegmentParameters {
+    
+    var rect: CGRect
+    var type: SegmentType
+    
+    func path() -> UIBezierPath {
+        
+        switch type {
+        case .Head, .Tail, .Middle, .Food:
+            return UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: rect.width, height: rect.height))
+        default:
+            let fillRect = CGRect(x: 1, y: 1, width: rect.width-2, height: rect.width - 2)
+            
+            return UIBezierPath(roundedRect: fillRect, cornerRadius: rect.width/5)
+        }
+    }
+    
+    func color() -> UIColor {
+        switch type {
+        case .Head:
+            return UIColor.blueColor().colorWithAlphaComponent(0.8)
+        case .Tail:
+            return UIColor.yellowColor()
+        case .Border:
+            return UIColor.grayColor()
+        case .Food:
+            return UIColor.redColor()
+        case.Middle:
+            return UIColor.greenColor().colorWithAlphaComponent(0.8)
+        }
+    }
+    
+}
+
 class GameSegment {
     
     private var point: CGPoint!
     private var side: CGFloat!
     
-    var color: UIColor!
+    var parameters: SegmentParameters!
     
-    var rect: CGRect {
+    var type: SegmentType! {
+        didSet{
+            updateParameters()
+        }
+    }
+    
+    private var rect: CGRect {
         get{
             return CGRect(x: point.x, y: point.y, width: side, height: side)
         }
@@ -26,41 +75,9 @@ class GameSegment {
         self.point = point
         self.side = side
     }
-}
-
-class SnakeSegment: GameSegment {
     
-    var isEaten: Bool! {
-        didSet{
-            color = isEaten == true ? UIColor.greenColor().colorWithAlphaComponent(0.8) : UIColor.redColor()
-        }
-    }
-    
-    override init(point: CGPoint, side: CGFloat) {
-        super.init(point: point, side: side)
+    private func updateParameters(){
         
-        color = UIColor.redColor()
-    }
-}
-
-class Border: GameSegment {
-    
-    var layer: CAShapeLayer!
-    
-    override init(point: CGPoint, side: CGFloat) {
-        super.init(point: point, side: side)
-                
-        layer = CAShapeLayer()
-        layer.path = rectLayer().CGPath
-        layer.fillColor = UIColor.blackColor().CGColor
-    }
-    
-    private func rectLayer() -> UIBezierPath {
-        
-        let fillRect = CGRect(x: rect.minX + 1, y: rect.minY + 1, width: side-2, height: side - 2)
-        
-        let path = UIBezierPath(roundedRect: fillRect, cornerRadius: side/5)
-        
-        return path
+        parameters = SegmentParameters(rect: rect, type: type)
     }
 }
