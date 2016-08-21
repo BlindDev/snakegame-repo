@@ -8,22 +8,23 @@
 
 import UIKit
 
+let side: CGFloat = UIScreen.mainScreen().bounds.width / 30
+
 class GameBrain {
     
-    private let side: CGFloat! = 10
     
     private var direction: (CGPoint)!
 
-    private var actions: Dictionary <String, (CGPoint)> = [
-        "Up" : CGPointMake(0,-10),
-        "Down" : CGPointMake(0,10),
-        "Left" : CGPointMake(-10,0),
-        "Right" : CGPointMake(10,0)
+    private var movements = [
+        "Up" : CGPointMake(0,-side),
+        "Down" : CGPointMake(0,side),
+        "Left" : CGPointMake(-side,0),
+        "Right" : CGPointMake(side,0)
     ]
     
-    func setDirection(buttonAction: String){
+    func setDirection(gestureDirection: String){
         
-        if let action = actions[buttonAction] {
+        if let action = movements[gestureDirection] {
             
             if (direction != nil) {
                 if !(direction.x + action.x == 0 && direction.y + action.y == 0) {
@@ -149,35 +150,42 @@ class GameBrain {
     
     private func randomPoint() -> CGPoint {
         
-        let side32 = side.toUInt32()
-        
-        let width32 = (fRect.width - side * 2).toUInt32()
-        
-        let height32 = (fRect.height - side * 2).toUInt32()
-        
-        let randomMultiX = arc4random_uniform(width32 / side32) + 1
-        
-        let randomMultiY = arc4random_uniform(height32 / side32) + 1
-        
-        let newX: CGFloat = CGFloat(randomMultiX) * side + fRect.origin.x
-        let newY: CGFloat! = CGFloat(randomMultiY) * side + fRect.origin.y
+        let newX = randomMultiplier(fRect.width, coord: fRect.origin.x)
+        let newY = randomMultiplier(fRect.height, coord: fRect.origin.y)
         
         return  CGPoint(x: newX, y: newY)
     }
     
     private func centerPoint() -> CGPoint {
         
-        let x = calculatedMultiplier(fRect.width) * side + fRect.origin.x
-        let y = calculatedMultiplier(fRect.height) * side + fRect.origin.y
+        let x = calculatedMultiplier(fRect.width, coord: fRect.origin.x)
+        let y = calculatedMultiplier(fRect.height, coord: fRect.origin.y)
         
         return CGPoint(x: x, y: y)
     }
     
-    private func calculatedMultiplier(value: CGFloat) -> CGFloat{
+    private func randomMultiplier(value: CGFloat, coord: CGFloat) -> CGFloat {
+        
+        let parameter = (value - side * 2).toUInt32()
+        
+        let side32 = side.toUInt32()
+
+        var multiplier: UInt32!
+        
+        multiplier = arc4random_uniform(parameter / side32)
+        
+        if multiplier == 0 {
+            multiplier = 1
+        }
+        
+        return CGFloat(multiplier) * side + coord
+    }
+    
+    private func calculatedMultiplier(value: CGFloat, coord: CGFloat) -> CGFloat{
         
         let multiplier = value / side
         
-        return floor(multiplier / 2)
+        return floor(multiplier / 2) * side + coord
     }
     
     

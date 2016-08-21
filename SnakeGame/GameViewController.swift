@@ -12,8 +12,21 @@ class GameViewController: UIViewController {
 
     @IBOutlet weak var gameFieldView: GameFieldView!
     
-    @IBAction func buttonAction(sender: UIButton) {
-        brain.setDirection(sender.currentTitle!)
+    @IBAction func swipeRecognizer(sender: UISwipeGestureRecognizer) {
+        
+        switch sender.direction {
+        case UISwipeGestureRecognizerDirection.Right:
+            brain.setDirection("Right")
+        case UISwipeGestureRecognizerDirection.Down:
+            brain.setDirection("Down")
+        case UISwipeGestureRecognizerDirection.Left:
+            brain.setDirection("Left")
+        case UISwipeGestureRecognizerDirection.Up:
+            brain.setDirection("Up")
+        default:
+            break
+        }
+
     }
     
     private var brain: GameBrain!

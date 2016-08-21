@@ -69,7 +69,6 @@ class SegmentView: UIView {
             setNeedsDisplay()
         }
     }
-    //set needs display
     init(parameters: SegmentParameters) {
         super.init(frame: parameters.rect)
         
@@ -83,6 +82,7 @@ class SegmentView: UIView {
         parameters.color().setFill()
         path.fill()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
