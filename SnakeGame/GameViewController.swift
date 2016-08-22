@@ -9,6 +9,8 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    
+    private var timer: NSTimer!
 
     @IBOutlet weak var gameFieldView: GameFieldView!
     
@@ -53,8 +55,16 @@ class GameViewController: UIViewController {
 extension GameViewController: DidDrawDelegate{
     func viewDidDraw() {
         brain = GameBrain(viewSize: gameFieldView.correctSize)
+        brain.delegate = self
         gameFieldView.renderBorders(brain.borders)
         
-        NSTimer.scheduledTimerWithTimeInterval(0.50,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.50,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
+    }
+}
+
+extension GameViewController: BrainDelegate {
+    func snakeIsDead() {
+        timer.invalidate()
+        timer = nil
     }
 }

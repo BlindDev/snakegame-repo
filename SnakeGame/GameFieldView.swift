@@ -30,14 +30,12 @@ class GameFieldView: UIView {
             
             if i == segmentViews.count {
                 
-                let params = segment.parameters
-                segmentView = SegmentView(parameters: params)
+                segmentView = SegmentView(parameters: segment.parameters)
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
-            }else{
-                segmentView = segmentViews[i]
                 
-                segmentView.parameters = segment.parameters
+            }else{
+                segmentViews[i].parameters = segment.parameters
             }
         }
     }
@@ -46,8 +44,7 @@ class GameFieldView: UIView {
                 
         for border in borders{
             
-            let params = border.parameters
-            let view = SegmentView(parameters: params)
+            let view = SegmentView(parameters: border.parameters)
             addSubview(view)
         }
         
@@ -61,6 +58,14 @@ class GameFieldView: UIView {
     }
 }
 
+enum SegmentType{
+    case Head
+    case Tail
+    case Border
+    case Middle
+    case Food
+}
+
 class SegmentView: UIView {
     
     var parameters: SegmentParameters!{
@@ -69,6 +74,7 @@ class SegmentView: UIView {
             setNeedsDisplay()
         }
     }
+    
     init(parameters: SegmentParameters) {
         super.init(frame: parameters.rect)
         
@@ -78,9 +84,35 @@ class SegmentView: UIView {
     
     
     override func drawRect(rect: CGRect) {
-        let path = parameters.path()
-        parameters.color().setFill()
-        path.fill()
+        color().setFill()
+        path().fill()
+    }
+    
+    func path() -> UIBezierPath {
+        
+        switch parameters.type {
+        case .Head, .Tail, .Middle, .Food:
+            return UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+        default:
+            let fillRect = CGRect(x: 1, y: 1, width: bounds.width-2, height: bounds.width - 2)
+            
+            return UIBezierPath(roundedRect: fillRect, cornerRadius: bounds.width/5)
+        }
+    }
+    
+    func color() -> UIColor {
+        switch parameters.type {
+        case .Head:
+            return UIColor.blueColor().colorWithAlphaComponent(0.8)
+        case .Tail:
+            return UIColor.yellowColor().colorWithAlphaComponent(0.8)
+        case .Border:
+            return UIColor.grayColor()
+        case .Food:
+            return UIColor.redColor()
+        case.Middle:
+            return UIColor.greenColor().colorWithAlphaComponent(0.8)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
