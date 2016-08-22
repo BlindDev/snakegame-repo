@@ -40,21 +40,7 @@ class GameBrain {
     
     private var headPoint: CGPoint!
     
-    private var screen: CGSize!
-    
-    private var fRect: CGRect!{
-        get{
-            let x = (screen.width % side)
-            
-            let y = (screen.height % side)
-            
-            let width = screen.width - x
-            
-            let height = screen.height - y
-            
-            return CGRect(x: x/2, y: y/2, width: width, height: height)
-        }
-    }
+    private var field: CGRect!
     
     var borders: [GameSegment]!
     
@@ -70,9 +56,14 @@ class GameBrain {
         }
     }
     
-    init(viewSize: CGSize){
+    init(viewSize: CGSize) {
         
-        screen = viewSize
+        let x = (viewSize.width % side)
+        
+        let y = (viewSize.height % side)
+        
+        field = CGRect(x: x/2, y: y/2, width: viewSize.width - x, height: viewSize.height - y)
+        
         score = 0
         
         //prepareView
@@ -97,56 +88,51 @@ class GameBrain {
         
         func bordersCreationMethod(startP: CGPoint, direction: CGPoint, count: Int) {
             
-            let startBorder = GameSegment(point: startP, side: side)
-            startBorder.type = SegmentType.Border
+            let startBorder = GameSegment(point: startP, type: .Border)
             borders.append(startBorder)
             
             var cyclePoint = startP
             for _ in 1..<count {
                 let borderPoint = CGPoint(x: cyclePoint.x + direction.x, y: cyclePoint.y + direction.y)
-                let newBorder = GameSegment(point: borderPoint, side: side)
-                newBorder.type = SegmentType.Border
+                let newBorder = GameSegment(point: borderPoint, type: .Border)
                 borders.append(newBorder)
                 cyclePoint = borderPoint
             }
         }
         
-        let verticalCount = Int(fRect.height / side)
+        let verticalCount = Int(field.height / side)
         //left border
-        bordersCreationMethod(fRect.origin, direction: CGPoint(x: 0, y: side), count: verticalCount)
+        bordersCreationMethod(field.origin, direction: CGPoint(x: 0, y: side), count: verticalCount)
         
         //right border
-        let rightX = screen.width - fRect.origin.x - side
-        bordersCreationMethod(CGPoint(x: rightX, y: fRect.origin.y), direction: CGPoint(x: 0, y: side), count: verticalCount)
+        let rightX = field.origin.x + field.width - side
+        bordersCreationMethod(CGPoint(x: rightX, y: field.origin.y), direction: CGPoint(x: 0, y: side), count: verticalCount)
         
-        let horizontalCount = Int(fRect.width / side) - 2
+        let horizontalCount = Int(field.width / side) - 2
         //top border
-        let horStartPoint = CGPoint(x: fRect.origin.x + side, y: fRect.origin.y)
+        let horStartPoint = CGPoint(x: field.origin.x + side, y: field.origin.y)
         bordersCreationMethod(horStartPoint, direction: CGPoint(x: side, y: 0), count: horizontalCount)
         
         //bot border
-        let botY = CGPoint(x: horStartPoint.x, y: screen.height - fRect.origin.y - side)
+        let botY = CGPoint(x: horStartPoint.x, y: field.origin.y + field.height - side)
         bordersCreationMethod(botY, direction: CGPoint(x: side, y: 0), count: horizontalCount)
         
     }
     
     private func headSegment() -> GameSegment {
-        let segment = GameSegment(point: headPoint, side: side)
-        segment.type = SegmentType.Middle
+        let segment = GameSegment(point: headPoint, type: .Middle)
         return segment
     }
     
     private func newSegment() -> GameSegment {
-        let segment = GameSegment(point: randomPoint(), side: side)
+        let segment = GameSegment(point: randomPoint(), type: .Food)
         
-        segment.type = SegmentType.Food
-
         return segment
     }
     
     private func randomPoint() -> CGPoint {
         
-        func randomMultiplier(value: CGFloat, coord: CGFloat) -> CGFloat {
+        func multiplier(value: CGFloat, _ coord: CGFloat) -> CGFloat {
             
             let parameter = (value - side * 2 - coord * 2).toUInt32()
             
@@ -162,26 +148,20 @@ class GameBrain {
             
             return CGFloat(multiplier) * side + coord
         }
-        
-        let newX = randomMultiplier(fRect.width, coord: fRect.origin.x)
-        let newY = randomMultiplier(fRect.height, coord: fRect.origin.y)
-        
-        return  CGPoint(x: newX, y: newY)
+
+        return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
     }
     
     private func centerPoint() -> CGPoint {
         
-        func calculatedMultiplier(value: CGFloat, coord: CGFloat) -> CGFloat{
+        func multiplier(value: CGFloat, _ coord: CGFloat) -> CGFloat{
             
             let multiplier = value / side
             
             return floor(multiplier / 2) * side + coord
         }
         
-        let x = calculatedMultiplier(fRect.width, coord: fRect.origin.x)
-        let y = calculatedMultiplier(fRect.height, coord: fRect.origin.y)
-        
-        return CGPoint(x: x, y: y)
+        return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
     }
     
     private var score: Int!
@@ -191,32 +171,26 @@ class GameBrain {
         headPoint.x += direction.x
         headPoint.y += direction.y
         
-        func checkContainingInSegments(segments: [GameSegment]) {
-            
-            for segment in segments {
-                if segment.parameters.rect.contains(headPoint) {
-                    
-                    delegate?.snakeIsDeadWithScore(score)
-                    return
-                }
+        for segment in borders + snake {
+            if segment.rect.contains(headPoint) {
+                
+                delegate?.snakeIsDeadWithScore(score)
+                return
             }
-            
-            moveHead()
-            
-            if food.parameters.rect.contains(headPoint) {
-                
-                score = score + 1
-                
-                delegate?.updateScoreWithScore(score)
-                
-                snake.insert(food, atIndex: 0)
-                
-                food = newSegment()
-            }
-
         }
         
-        checkContainingInSegments(borders + snake)
+        moveHead()
+        
+        if food.rect.contains(headPoint) {
+            
+            score = score + 1
+            
+            delegate?.updateScoreWithScore(score)
+            
+            snake.insert(food, atIndex: 0)
+            
+            food = newSegment()
+        }
         
     }
     

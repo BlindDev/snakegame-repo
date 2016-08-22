@@ -8,6 +8,18 @@
 
 import UIKit
 
+struct SegmentParameters {
+    
+    var rect: CGRect
+    var type: SegmentType
+    
+    init(segment: GameSegment){
+        
+        self.rect = segment.rect
+        self.type = segment.type
+    }
+}
+
 protocol DidDrawDelegate {
     func viewDidDraw()
 }
@@ -22,18 +34,18 @@ class GameFieldView: UIView {
             
         for i in 0..<segments.count {
             
-            let segment = segments[i]
+            let parameters = SegmentParameters(segment: segments[i])
             
             var segmentView: SegmentView!
             
             if i == segmentViews.count {
                 
-                segmentView = SegmentView(parameters: segment.parameters)
+                segmentView = SegmentView(parameters: parameters)
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
                 
             }else{
-                segmentViews[i].parameters = segment.parameters
+                segmentViews[i].parameters = parameters
             }
         }
     }
@@ -42,7 +54,10 @@ class GameFieldView: UIView {
                 
         for border in borders{
             
-            let view = SegmentView(parameters: border.parameters)
+            let parameters = SegmentParameters(segment: border)
+
+            let view = SegmentView(parameters: parameters)
+            
             addSubview(view)
         }
         

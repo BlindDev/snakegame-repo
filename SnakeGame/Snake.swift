@@ -8,34 +8,21 @@
 
 import UIKit
 
-struct SegmentParameters {
-    
-    var rect: CGRect
-    var type: SegmentType
-}
-
 class GameSegment {
     
     private var point: CGPoint!
-    private var side: CGFloat!
     
-    var parameters: SegmentParameters!
-    
-    var type: SegmentType! {
-        didSet{
-            updateParameters()
+    var rect: CGRect {
+        get{
+            return CGRect(x: point.x, y: point.y, width: side, height: side)
         }
     }
     
-    init(point: CGPoint, side: CGFloat){
+    var type: SegmentType!
+    
+    init(point: CGPoint, type: SegmentType){
         
         self.point = point
-        self.side = side
-    }
-    
-    private func updateParameters(){
-        
-        let rect = CGRect(x: point.x, y: point.y, width: side, height: side)
-        parameters = SegmentParameters(rect: rect, type: type)
+        self.type = type
     }
 }
