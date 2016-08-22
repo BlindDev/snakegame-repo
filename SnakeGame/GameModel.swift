@@ -11,7 +11,8 @@ import UIKit
 let side: CGFloat = UIScreen.mainScreen().bounds.width / 30
 
 protocol BrainDelegate {
-    func snakeIsDead()
+    func snakeIsDeadWithScore(value: Int)
+    func updateScoreWithScore(value: Int)
 }
 
 class GameBrain {
@@ -72,6 +73,7 @@ class GameBrain {
     init(viewSize: CGSize){
         
         screen = viewSize
+        score = 0
         
         //prepareView
         borders = []
@@ -182,36 +184,40 @@ class GameBrain {
         return CGPoint(x: x, y: y)
     }
     
+    private var score: Int!
     
     func updateHead(){
         
         headPoint.x += direction.x
         headPoint.y += direction.y
         
-        for border in borders {
+        func checkContainingInSegments(segments: [GameSegment]) {
             
-            if border.parameters.rect.contains(headPoint) {
-                
-                delegate?.snakeIsDead()
-                return
+            for segment in segments {
+                if segment.parameters.rect.contains(headPoint) {
+                    
+                    delegate?.snakeIsDeadWithScore(score)
+                    return
+                }
             }
-        }
-        
-        for segment in snake {
-            if segment.parameters.rect.contains(headPoint) {
-                
-                delegate?.snakeIsDead()
-                return
-            }
-        }
-        
-        moveHead()
-        
-        if food.parameters.rect.contains(headPoint) {
-            snake.insert(food, atIndex: 0)
             
-            food = newSegment()
+            moveHead()
+            
+            if food.parameters.rect.contains(headPoint) {
+                
+                score = score + 1
+                
+                delegate?.updateScoreWithScore(score)
+                
+                snake.insert(food, atIndex: 0)
+                
+                food = newSegment()
+            }
+
         }
+        
+        checkContainingInSegments(borders + snake)
+        
     }
     
     private func moveHead() {

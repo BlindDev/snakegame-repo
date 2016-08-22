@@ -18,8 +18,6 @@ class GameFieldView: UIView {
     
     var delegate: DidDrawDelegate?
     
-    var correctSize: CGSize!
-    
     func renderSegments(segments: [GameSegment]){
             
         for i in 0..<segments.count {
@@ -51,8 +49,6 @@ class GameFieldView: UIView {
     }
     
     override func drawRect(rect: CGRect) {
-
-        correctSize = rect.size
         
         delegate?.viewDidDraw()
     }
