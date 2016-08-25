@@ -8,18 +8,6 @@
 
 import UIKit
 
-struct SegmentParameters {
-    
-    var rect: CGRect
-    var type: SegmentType
-    
-    init(segment: GameSegment){
-        
-        self.rect = segment.rect
-        self.type = segment.type
-    }
-}
-
 protocol DidDrawDelegate {
     func viewDidDraw()
 }
@@ -32,19 +20,17 @@ class GameFieldView: UIView {
     
     func renderSegments(segments: [GameSegment]){
             
-        for (index, value) in segments.enumerate() {
-            
-            let parameters = SegmentParameters(segment: value)
+        for (index, segment) in segments.enumerate() {
             
             if index == segmentViews.count {
                 
-                let segmentView = SegmentView(parameters: parameters)
+                let segmentView = SegmentView(segment: segment)
                 
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
                 
             }else{
-                segmentViews[index].parameters = parameters
+                segmentViews[index].segment = segment
             }
         }
     }
@@ -53,9 +39,7 @@ class GameFieldView: UIView {
                 
         for border in borders{
             
-            let parameters = SegmentParameters(segment: border)
-
-            let view = SegmentView(parameters: parameters)
+            let view = SegmentView(segment: border)
             
             addSubview(view)
         }
@@ -85,18 +69,18 @@ enum SegmentType{
 
 class SegmentView: UIView {
     
-    var parameters: SegmentParameters!{
+    var segment: GameSegment!{
         didSet{
-            frame = parameters.rect
+            frame = segment.rect
             setNeedsDisplay()
         }
     }
     
-    init(parameters: SegmentParameters) {
-        super.init(frame: parameters.rect)
+    init(segment: GameSegment) {
+        super.init(frame: segment.rect)
         
         backgroundColor = UIColor.clearColor()
-        self.parameters = parameters
+        self.segment = segment
     }
     
     
@@ -107,7 +91,7 @@ class SegmentView: UIView {
     
     func path() -> UIBezierPath {
         
-        switch parameters.type {
+        switch segment.type {
         case .Head, .Tail, .Middle, .Food:
             return UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
         default:
@@ -118,7 +102,7 @@ class SegmentView: UIView {
     }
     
     func color() -> UIColor {
-        switch parameters.type {
+        switch segment.type {
         case .Head:
             return UIColor.blueColor().colorWithAlphaComponent(0.8)
         case .Tail:

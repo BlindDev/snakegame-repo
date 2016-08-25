@@ -8,7 +8,7 @@
 
 import UIKit
 
-let side: CGFloat = UIScreen.mainScreen().bounds.width / 30
+let side: CGFloat = UIScreen.mainScreen().bounds.width / 25
 
 protocol BrainDelegate {
     func snakeIsDeadWithScore(value: Int)

@@ -18,7 +18,7 @@ class GameSegment {
         }
     }
     
-    var type: SegmentType!
+    var type: SegmentType
     
     init(point: CGPoint, type: SegmentType){
         

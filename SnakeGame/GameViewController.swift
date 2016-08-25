@@ -22,7 +22,7 @@ class GameViewController: UIViewController {
     @IBAction func refreshAction(sender: UIBarButtonItem) {
         
         gameFieldView.clearSubviews()
-        gameFieldView.setNeedsDisplay()
+        resetBrain()
     }
     
     private var brain: GameBrain!
