@@ -41,6 +41,8 @@ class GameViewController: UIViewController {
     
     private func resetBrain() {
         
+        navigationItem.title = "Snake"
+
         brain = GameBrain(viewSize: gameFieldView.bounds.size)
         
         brain.delegate = self

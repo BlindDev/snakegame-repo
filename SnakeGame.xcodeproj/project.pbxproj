@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A03D5DB61D6EEC6100F76A4A /* SnakeSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D5DB51D6EEC6100F76A4A /* SnakeSegments.swift */; };
 		A0997FD31D3CDB5D00AB2AC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */; };
 		A0997FD81D3CDB5D00AB2AC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0997FD61D3CDB5D00AB2AC4 /* Main.storyboard */; };
 		A0997FDA1D3CDB5D00AB2AC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0997FD91D3CDB5D00AB2AC4 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A03D5DB51D6EEC6100F76A4A /* SnakeSegments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnakeSegments.swift; sourceTree = "<group>"; };
 		A0997FCF1D3CDB5D00AB2AC4 /* SnakeGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnakeGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0997FD71D3CDB5D00AB2AC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				A0997FD21D3CDB5D00AB2AC4 /* AppDelegate.swift */,
+				A03D5DB51D6EEC6100F76A4A /* SnakeSegments.swift */,
 				A0997FD91D3CDB5D00AB2AC4 /* Assets.xcassets */,
 				A0997FDB1D3CDB5D00AB2AC4 /* LaunchScreen.storyboard */,
 				A0997FDE1D3CDB5D00AB2AC4 /* Info.plist */,
@@ -159,6 +162,7 @@
 			files = (
 				A0997FE81D3CDFBE00AB2AC4 /* GameFieldView.swift in Sources */,
 				A0997FEA1D3CDFEE00AB2AC4 /* GameModel.swift in Sources */,
+				A03D5DB61D6EEC6100F76A4A /* SnakeSegments.swift in Sources */,
 				A0AB42391D432B8700239297 /* Snake.swift in Sources */,
 				A0997FE61D3CDF2500AB2AC4 /* GameViewController.swift in Sources */,
 				A0997FD31D3CDB5D00AB2AC4 /* AppDelegate.swift in Sources */,

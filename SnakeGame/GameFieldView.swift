@@ -52,13 +52,6 @@ class GameFieldView: UIView {
     }
 }
 
-enum SegmentType{
-    case Head
-    case Tail
-    case Border
-    case Middle
-    case Food
-}
 
 class SegmentView: UIView {
     
@@ -71,6 +64,8 @@ class SegmentView: UIView {
         }
     }
     
+    private var open: Bool = true
+    
     init(segment: GameSegment) {
         super.init(frame: segment.rect)
         
@@ -80,20 +75,23 @@ class SegmentView: UIView {
     
     
     override func drawRect(rect: CGRect) {
-        color().setFill()
-        path().fill()
-    }
-    
-    func path() -> UIBezierPath {
+        
+        open = !open
         
         switch segment.type {
-        case .Head, .Tail, .Middle, .Food:
-            return UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
+        case .Head:
+            SnakeSegments.drawHead(open: open, angle: segment.direction.rawValue, bounds: bounds)
+        case .Tail:
+            SnakeSegments.drawTail(angle: segment.direction.rawValue, bounds: bounds)
+        case .Middle:
+            SnakeSegments.drawMiddle(bounds: bounds)
+        case  .Food:
+            SnakeSegments.drawFood(bounds: bounds)
         case .Border:
-            let fillRect = CGRect(x: 1, y: 1, width: bounds.width-2, height: bounds.width - 2)
-            return UIBezierPath(roundedRect: fillRect, cornerRadius: bounds.width/5)
+            SnakeSegments.drawBorder(bounds: bounds)
         }
     }
+    
     
     func color() -> UIColor {
         switch segment.type {

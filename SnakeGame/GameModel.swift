@@ -191,11 +191,34 @@ class GameBrain {
             
             delegate?.updateScoreWithScore(score)
             
-            snake.insert(food, atIndex: 0)
+            snake.insert(food, atIndex: snake.endIndex)
             
             food = newSegment()
         }
         
+    }
+    
+    private func directionByPoint(current: CGPoint, next: CGPoint) -> Direction {
+        
+        var newDirection: Direction = .Up
+        
+        if next.x - current.x > 0 {
+            newDirection = Direction.Right
+        }
+        
+        if next.x - current.x < 0 {
+            newDirection = Direction.Left
+        }
+        
+        if next.y - current.y > 0 {
+            newDirection = Direction.Down
+        }
+        
+        if next.y - current.y < 0 {
+            newDirection = Direction.Up
+        }
+        
+        return newDirection
     }
     
     private func moveHead() {
@@ -208,6 +231,8 @@ class GameBrain {
         
         let head = headSegment()
         head.type = SegmentType.Head
+        head.direction = directionByPoint(first.rect.origin, next: headPoint)
+
         snake.insert(head, atIndex: 0)
         
         snake.removeLast()
@@ -217,6 +242,10 @@ class GameBrain {
         }
         
         last.type = SegmentType.Tail
+        
+        let tailPrevous = snake[snake.endIndex - 2]
+        
+        last.direction = directionByPoint(last.rect.origin, next: tailPrevous.rect.origin)
     }
     
 }
