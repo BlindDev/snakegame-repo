@@ -186,7 +186,7 @@ class GameBrain {
         moveHead()
         
         if food.rect.contains(headPoint) {
-            
+                        
             score = score + 1
             
             delegate?.updateScoreWithScore(score)

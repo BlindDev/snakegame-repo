@@ -30,7 +30,10 @@ class GameFieldView: UIView {
                 segmentViews.append(segmentView)
                 
             }else{
-                segmentViews[index].segment = segment
+                
+                if segmentViews[index].segment.rect != segment.rect {
+                    segmentViews[index].segment = segment
+                }
             }
         }
     }
@@ -61,11 +64,8 @@ class SegmentView: UIView {
     
     var segment: GameSegment!{
         didSet{
-            frame = segment.rect
             
-//            UIView.animateWithDuration(0.10, animations: {
-//                self.frame = self.segment.rect
-//            })
+            frame = segment.rect
             
             setNeedsDisplay()
         }
