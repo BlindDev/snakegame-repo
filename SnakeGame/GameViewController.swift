@@ -20,7 +20,9 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func refreshAction(sender: UIBarButtonItem) {
-        resetBrain()
+        
+        gameFieldView.clearSubviews()
+        gameFieldView.setNeedsDisplay()
     }
     
     private var brain: GameBrain!
@@ -38,8 +40,11 @@ class GameViewController: UIViewController {
     }
     
     private func resetBrain() {
+        
         brain = GameBrain(viewSize: gameFieldView.bounds.size)
+        
         brain.delegate = self
+        
         gameFieldView.renderBorders(brain.borders)
         
         timer = NSTimer.scheduledTimerWithTimeInterval(0.10,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)

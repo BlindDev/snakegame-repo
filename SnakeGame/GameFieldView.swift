@@ -36,11 +36,9 @@ class GameFieldView: UIView {
             
             let parameters = SegmentParameters(segment: value)
             
-            var segmentView: SegmentView!
-            
             if index == segmentViews.count {
                 
-                segmentView = SegmentView(parameters: parameters)
+                let segmentView = SegmentView(parameters: parameters)
                 
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
@@ -60,6 +58,14 @@ class GameFieldView: UIView {
             let view = SegmentView(parameters: parameters)
             
             addSubview(view)
+        }
+    }
+    
+    func clearSubviews() {
+        
+        segmentViews = []
+        for view in subviews {
+            view.removeFromSuperview()
         }
     }
     
