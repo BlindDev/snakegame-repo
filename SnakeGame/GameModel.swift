@@ -47,7 +47,7 @@ class GameBrain {
     
     private var field: CGRect!
     
-    var borders: [GameSegment]!
+    private var borders: [GameSegment]!
     
     private var snake: [GameSegment]!
     
@@ -55,7 +55,7 @@ class GameBrain {
     
     var segments: [GameSegment]! {
         get{
-            var array = snake
+            var array = snake + borders
             array.append(food)
             return array
         }
@@ -78,10 +78,9 @@ class GameBrain {
         //setting default direction
         setDirection(UISwipeGestureRecognizerDirection.Up)
         
+        headPoint = centerPoint()
         //snake body
         snake = []
-        headPoint = centerPoint()
-        snake.append(headSegment())
         snake.append(headSegment())
         snake.append(headSegment())
         

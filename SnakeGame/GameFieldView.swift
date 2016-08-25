@@ -35,16 +35,6 @@ class GameFieldView: UIView {
         }
     }
     
-    func renderBorders(borders: [GameSegment]) {
-                
-        for border in borders{
-            
-            let view = SegmentView(segment: border)
-            
-            addSubview(view)
-        }
-    }
-    
     func clearSubviews() {
         
         segmentViews = []
