@@ -62,6 +62,11 @@ class SegmentView: UIView {
     var segment: GameSegment!{
         didSet{
             frame = segment.rect
+            
+//            UIView.animateWithDuration(0.10, animations: {
+//                self.frame = self.segment.rect
+//            })
+            
             setNeedsDisplay()
         }
     }
@@ -84,9 +89,8 @@ class SegmentView: UIView {
         switch segment.type {
         case .Head, .Tail, .Middle, .Food:
             return UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height))
-        default:
+        case .Border:
             let fillRect = CGRect(x: 1, y: 1, width: bounds.width-2, height: bounds.width - 2)
-            
             return UIBezierPath(roundedRect: fillRect, cornerRadius: bounds.width/5)
         }
     }
