@@ -32,20 +32,21 @@ class GameFieldView: UIView {
     
     func renderSegments(segments: [GameSegment]){
             
-        for i in 0..<segments.count {
+        for (index, value) in segments.enumerate() {
             
-            let parameters = SegmentParameters(segment: segments[i])
+            let parameters = SegmentParameters(segment: value)
             
             var segmentView: SegmentView!
             
-            if i == segmentViews.count {
+            if index == segmentViews.count {
                 
                 segmentView = SegmentView(parameters: parameters)
+                
                 self.addSubview(segmentView)
                 segmentViews.append(segmentView)
                 
             }else{
-                segmentViews[i].parameters = parameters
+                segmentViews[index].parameters = parameters
             }
         }
     }
@@ -60,7 +61,6 @@ class GameFieldView: UIView {
             
             addSubview(view)
         }
-        
     }
     
     override func drawRect(rect: CGRect) {

@@ -16,19 +16,9 @@ class GameViewController: UIViewController {
     
     @IBAction func swipeRecognizer(sender: UISwipeGestureRecognizer) {
         
-        switch sender.direction {
-        case UISwipeGestureRecognizerDirection.Right:
-            brain.setDirection("Right")
-        case UISwipeGestureRecognizerDirection.Down:
-            brain.setDirection("Down")
-        case UISwipeGestureRecognizerDirection.Left:
-            brain.setDirection("Left")
-        case UISwipeGestureRecognizerDirection.Up:
-            brain.setDirection("Up")
-        default:
-            break
-        }
+        brain.setDirection(sender.direction)
     }
+    
     @IBAction func refreshAction(sender: UIBarButtonItem) {
         resetBrain()
     }

@@ -21,20 +21,25 @@ class GameBrain {
     
     private var direction: (CGPoint)!
     
-    func setDirection(gestureDirection: String){
+    func setDirection(gestureDirection: UISwipeGestureRecognizerDirection){
         
-        let movements = [
-            "Up" : CGPointMake(0,-side),
-            "Down" : CGPointMake(0,side),
-            "Left" : CGPointMake(-side,0),
-            "Right" : CGPointMake(side,0)
-        ]
+        var newDirection: CGPoint!
         
-        if let action = movements[gestureDirection] {
-            
-            if direction == nil || !(direction.x + action.x == 0 && direction.y + action.y == 0) {
-                direction = action
-            }
+        switch gestureDirection {
+        case UISwipeGestureRecognizerDirection.Right:
+            newDirection = CGPointMake(side,0)
+        case UISwipeGestureRecognizerDirection.Down:
+            newDirection = CGPointMake(0,side)
+        case UISwipeGestureRecognizerDirection.Left:
+            newDirection = CGPointMake(-side,0)
+        case UISwipeGestureRecognizerDirection.Up:
+            newDirection = CGPointMake(0,-side)
+        default:
+            break
+        }
+        
+        if direction == nil || !(direction.x + newDirection.x == 0 && direction.y + newDirection.y == 0) {
+            direction = newDirection
         }
     }
     
@@ -71,7 +76,7 @@ class GameBrain {
         createBorders()
         
         //setting default direction
-        setDirection("Up")
+        setDirection(UISwipeGestureRecognizerDirection.Up)
         
         //snake body
         snake = []
@@ -148,7 +153,7 @@ class GameBrain {
             
             return CGFloat(multiplier) * side + coord
         }
-
+        
         return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
     }
     
