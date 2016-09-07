@@ -47,7 +47,7 @@ class GameViewController: UIViewController {
         
         brain.delegate = self
                 
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.10,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.20,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
     }
 }
 

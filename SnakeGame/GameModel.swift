@@ -56,7 +56,11 @@ class GameBrain {
     var segments: [GameSegment]! {
         get{
             var array = snake + borders
-            array.append(food)
+            
+            if food != nil {
+                array.append(food)
+            }
+            
             return array
         }
     }
@@ -85,7 +89,7 @@ class GameBrain {
         snake.append(headSegment())
         
         //create segment to eat
-        food = newSegment()
+        food = newSegment(.Food)
     }
     
     private func createBorders(){
@@ -128,8 +132,9 @@ class GameBrain {
         return segment
     }
     
-    private func newSegment() -> GameSegment {
-        let segment = GameSegment(point: randomPoint(), type: .Food)
+    private func newSegment(type: SegmentType) -> GameSegment {
+        
+        let segment = GameSegment(point: randomPoint(), type: type)
         
         return segment
     }
@@ -153,7 +158,16 @@ class GameBrain {
             return CGFloat(multiplier) * side + coord
         }
         
-        return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
+        let newPoint = CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
+        
+        for segment in segments {
+            
+            if segment.rect.contains(newPoint) {
+                return randomPoint()
+            }
+        }
+        
+        return newPoint
     }
     
     private func centerPoint() -> CGPoint {
@@ -168,7 +182,13 @@ class GameBrain {
         return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
     }
     
-    private var score: Int!
+    private var score: Int! {
+        didSet{
+            if score % 3 == 0 {
+                borders.append(newSegment(.Border))
+            }
+        }
+    }
     
     func updateHead(){
         
@@ -183,8 +203,6 @@ class GameBrain {
             }
         }
         
-        moveHead()
-        
         if food.rect.contains(headPoint) {
                         
             score = score + 1
@@ -193,9 +211,10 @@ class GameBrain {
             
             snake.insert(food, atIndex: snake.endIndex)
             
-            food = newSegment()
+            food = newSegment(.Food)
         }
         
+        moveHead()
     }
     
     private func directionByPoint(current: CGPoint, next: CGPoint) -> Direction {
