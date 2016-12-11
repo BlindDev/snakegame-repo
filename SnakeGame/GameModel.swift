@@ -8,32 +8,32 @@
 
 import UIKit
 
-let side = round(UIScreen.mainScreen().bounds.width / 20)
+let side = round(UIScreen.main.bounds.width / 20)
 
 protocol BrainDelegate {
-    func snakeIsDeadWithScore(value: Int)
-    func updateScoreWithScore(value: Int)
+    func snakeIsDeadWithScore(_ value: Int)
+    func updateScoreWithScore(_ value: Int)
 }
 
 class GameBrain {
     
     var delegate: BrainDelegate?
     
-    private var direction: (CGPoint)!
+    fileprivate var direction: (CGPoint)!
     
-    func setDirection(gestureDirection: UISwipeGestureRecognizerDirection){
+    func setDirection(_ gestureDirection: UISwipeGestureRecognizerDirection){
         
         var newDirection: CGPoint!
         
         switch gestureDirection {
-        case UISwipeGestureRecognizerDirection.Right:
-            newDirection = CGPointMake(side,0)
-        case UISwipeGestureRecognizerDirection.Down:
-            newDirection = CGPointMake(0,side)
-        case UISwipeGestureRecognizerDirection.Left:
-            newDirection = CGPointMake(-side,0)
-        case UISwipeGestureRecognizerDirection.Up:
-            newDirection = CGPointMake(0,-side)
+        case UISwipeGestureRecognizerDirection.right:
+            newDirection = CGPoint(x: side,y: 0)
+        case UISwipeGestureRecognizerDirection.down:
+            newDirection = CGPoint(x: 0,y: side)
+        case UISwipeGestureRecognizerDirection.left:
+            newDirection = CGPoint(x: -side,y: 0)
+        case UISwipeGestureRecognizerDirection.up:
+            newDirection = CGPoint(x: 0,y: -side)
         default:
             break
         }
@@ -43,15 +43,15 @@ class GameBrain {
         }
     }
     
-    private var headPoint: CGPoint!
+    fileprivate var headPoint: CGPoint!
     
-    private var field: CGRect!
+    fileprivate var field: CGRect!
     
-    private var borders: [GameSegment]!
+    fileprivate var borders: [GameSegment]!
     
-    private var snake: [GameSegment]!
+    fileprivate var snake: [GameSegment]!
     
-    private var food: GameSegment!
+    fileprivate var food: GameSegment!
     
     var segments: [GameSegment]! {
         get{
@@ -67,9 +67,9 @@ class GameBrain {
     
     init(viewSize: CGSize) {
         
-        let x = (viewSize.width % side)
+        let x = (viewSize.width.truncatingRemainder(dividingBy: side))
         
-        let y = (viewSize.height % side)
+        let y = (viewSize.height.truncatingRemainder(dividingBy: side))
         
         field = CGRect(x: x/2, y: y/2, width: viewSize.width - x, height: viewSize.height - y)
         
@@ -80,7 +80,7 @@ class GameBrain {
         createBorders()
         
         //setting default direction
-        setDirection(UISwipeGestureRecognizerDirection.Up)
+        setDirection(UISwipeGestureRecognizerDirection.up)
         
         headPoint = centerPoint()
         //snake body
@@ -89,20 +89,20 @@ class GameBrain {
         snake.append(headSegment())
         
         //create segment to eat
-        food = newSegment(.Food)
+        food = newSegment(.food)
     }
     
-    private func createBorders(){
+    fileprivate func createBorders(){
         
-        func bordersCreationMethod(startP: CGPoint, direction: CGPoint, count: Int) {
+        func bordersCreationMethod(_ startP: CGPoint, direction: CGPoint, count: Int) {
             
-            let startBorder = GameSegment(point: startP, type: .Border)
+            let startBorder = GameSegment(point: startP, type: .border)
             borders.append(startBorder)
             
             var cyclePoint = startP
             for _ in 1..<count {
                 let borderPoint = CGPoint(x: cyclePoint.x + direction.x, y: cyclePoint.y + direction.y)
-                let newBorder = GameSegment(point: borderPoint, type: .Border)
+                let newBorder = GameSegment(point: borderPoint, type: .border)
                 borders.append(newBorder)
                 cyclePoint = borderPoint
             }
@@ -127,21 +127,21 @@ class GameBrain {
         
     }
     
-    private func headSegment() -> GameSegment {
-        let segment = GameSegment(point: headPoint, type: .Middle)
+    fileprivate func headSegment() -> GameSegment {
+        let segment = GameSegment(point: headPoint, type: .middle)
         return segment
     }
     
-    private func newSegment(type: SegmentType) -> GameSegment {
+    fileprivate func newSegment(_ type: SegmentType) -> GameSegment {
         
         let segment = GameSegment(point: randomPoint(), type: type)
         
         return segment
     }
     
-    private func randomPoint() -> CGPoint {
+    fileprivate func randomPoint() -> CGPoint {
         
-        func multiplier(value: CGFloat, _ coord: CGFloat) -> CGFloat {
+        func multiplier(_ value: CGFloat, _ coord: CGFloat) -> CGFloat {
             
             let parameter = (value - side * 2 - coord * 2).toUInt32()
             
@@ -170,9 +170,9 @@ class GameBrain {
         return newPoint
     }
     
-    private func centerPoint() -> CGPoint {
+    fileprivate func centerPoint() -> CGPoint {
         
-        func multiplier(value: CGFloat, _ coord: CGFloat) -> CGFloat{
+        func multiplier(_ value: CGFloat, _ coord: CGFloat) -> CGFloat{
             
             let multiplier = value / side
             
@@ -182,10 +182,10 @@ class GameBrain {
         return CGPoint(x: multiplier(field.width, field.origin.x), y: multiplier(field.height, field.origin.y))
     }
     
-    private var score: Int! {
+    fileprivate var score: Int! {
         didSet{
             if score % 3 == 0 {
-                borders.append(newSegment(.Border))
+                borders.append(newSegment(.border))
             }
         }
     }
@@ -209,50 +209,50 @@ class GameBrain {
             
             delegate?.updateScoreWithScore(score)
             
-            snake.insert(food, atIndex: snake.endIndex)
+            snake.insert(food, at: snake.endIndex)
             
-            food = newSegment(.Food)
+            food = newSegment(.food)
         }
         
         moveHead()
     }
     
-    private func directionByPoint(current: CGPoint, next: CGPoint) -> Direction {
+    fileprivate func directionByPoint(_ current: CGPoint, next: CGPoint) -> Direction {
         
-        var newDirection: Direction = .Up
+        var newDirection: Direction = .up
         
         if next.x - current.x > 0 {
-            newDirection = Direction.Right
+            newDirection = Direction.right
         }
         
         if next.x - current.x < 0 {
-            newDirection = Direction.Left
+            newDirection = Direction.left
         }
         
         if next.y - current.y > 0 {
-            newDirection = Direction.Down
+            newDirection = Direction.down
         }
         
         if next.y - current.y < 0 {
-            newDirection = Direction.Up
+            newDirection = Direction.up
         }
         
         return newDirection
     }
     
-    private func moveHead() {
+    fileprivate func moveHead() {
         
         guard let first = snake.first else{
             return
         }
         
-        first.type = SegmentType.Middle
+        first.type = SegmentType.middle
         
         let head = headSegment()
-        head.type = SegmentType.Head
+        head.type = SegmentType.head
         head.direction = directionByPoint(first.rect.origin, next: headPoint)
 
-        snake.insert(head, atIndex: 0)
+        snake.insert(head, at: 0)
         
         snake.removeLast()
         
@@ -260,7 +260,7 @@ class GameBrain {
             return
         }
         
-        last.type = SegmentType.Tail
+        last.type = SegmentType.tail
         
         let tailPrevous = snake[snake.endIndex - 2]
         

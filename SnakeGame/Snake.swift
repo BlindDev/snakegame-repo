@@ -9,23 +9,23 @@
 import UIKit
 
 enum Direction: CGFloat {
-    case Up = 0
-    case Down = 180
-    case Left = 90
-    case Right = 270
+    case up = 0
+    case down = 180
+    case left = 90
+    case right = 270
 }
 
 enum SegmentType{
-    case Head
-    case Tail
-    case Border
-    case Middle
-    case Food
+    case head
+    case tail
+    case border
+    case middle
+    case food
 }
 
 class GameSegment {
     
-    private var point: CGPoint!
+    fileprivate var point: CGPoint!
     
     var direction: Direction! 
 

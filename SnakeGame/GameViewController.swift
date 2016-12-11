@@ -10,22 +10,22 @@ import UIKit
 
 class GameViewController: UIViewController {
     
-    private var timer: NSTimer!
+    fileprivate var timer: Timer!
 
     @IBOutlet weak var gameFieldView: GameFieldView!
     
-    @IBAction func swipeRecognizer(sender: UISwipeGestureRecognizer) {
+    @IBAction func swipeRecognizer(_ sender: UISwipeGestureRecognizer) {
         
         brain.setDirection(sender.direction)
     }
     
-    @IBAction func refreshAction(sender: UIBarButtonItem) {
+    @IBAction func refreshAction(_ sender: UIBarButtonItem) {
         
         gameFieldView.clearSubviews()
         resetBrain()
     }
     
-    private var brain: GameBrain!
+    fileprivate var brain: GameBrain!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,13 +33,13 @@ class GameViewController: UIViewController {
         gameFieldView.delegate = self
     }
     
-    @objc private func movePoint() {
+    @objc fileprivate func movePoint() {
         
         brain.updateHead()
         gameFieldView.renderSegments(brain.segments)
     }
     
-    private func resetBrain() {
+    fileprivate func resetBrain() {
         
         navigationItem.title = "Snake"
 
@@ -47,7 +47,7 @@ class GameViewController: UIViewController {
         
         brain.delegate = self
                 
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.20,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.20,  target: self, selector: #selector(movePoint), userInfo: nil, repeats: true)
     }
 }
 
@@ -60,7 +60,7 @@ extension GameViewController: DidDrawDelegate{
 }
 
 extension GameViewController: BrainDelegate {
-    func snakeIsDeadWithScore(value: Int) {
+    func snakeIsDeadWithScore(_ value: Int) {
         
         navigationItem.title = "Game over! Score: \(value)"
 
@@ -68,7 +68,7 @@ extension GameViewController: BrainDelegate {
         timer = nil
     }
     
-    func updateScoreWithScore(value: Int) {
+    func updateScoreWithScore(_ value: Int) {
         
         navigationItem.title = "Score: \(value)"
     }

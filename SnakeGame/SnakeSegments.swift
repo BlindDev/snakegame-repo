@@ -12,23 +12,23 @@
 
 import UIKit
 
-public class SnakeSegments : NSObject {
+open class SnakeSegments : NSObject {
 
     //// Cache
 
-    private struct Cache {
+    fileprivate struct Cache {
         static let bodyColor: UIColor = UIColor(red: 0.000, green: 1.000, blue: 0.338, alpha: 1.000)
         static let foodColor: UIColor = UIColor(red: 1.000, green: 0.000, blue: 0.000, alpha: 1.000)
     }
 
     //// Colors
 
-    public class var bodyColor: UIColor { return Cache.bodyColor }
-    public class var foodColor: UIColor { return Cache.foodColor }
+    open class var bodyColor: UIColor { return Cache.bodyColor }
+    open class var foodColor: UIColor { return Cache.foodColor }
 
     //// Drawing Methods
 
-    public class func drawHeadSymbol(open open: Bool = false, angle: CGFloat = 90) {
+    open class func drawHeadSymbol(open: Bool = false, angle: CGFloat = 90) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
@@ -40,15 +40,15 @@ public class SnakeSegments : NSObject {
         let startAngle: CGFloat = open ? 415 : 450
 
         //// Oval Drawing
-        CGContextSaveGState(context)
-        CGContextTranslateCTM(context, 30, 30)
-        CGContextRotateCTM(context, -angle * CGFloat(M_PI) / 180)
+        context?.saveGState()
+        context?.translateBy(x: 30, y: 30)
+        context?.rotate(by: -angle * CGFloat(M_PI) / 180)
 
         let ovalRect = CGRect(x: -25, y: -25, width: 50, height: 50)
         let ovalPath = UIBezierPath()
-        ovalPath.addArcWithCenter(CGPoint(x: ovalRect.midX, y: ovalRect.midY), radius: ovalRect.width / 2, startAngle: -startAngle * CGFloat(M_PI)/180, endAngle: -endAngle * CGFloat(M_PI)/180, clockwise: true)
-        ovalPath.addLineToPoint(CGPoint(x: ovalRect.midX, y: ovalRect.midY))
-        ovalPath.closePath()
+        ovalPath.addArc(withCenter: CGPoint(x: ovalRect.midX, y: ovalRect.midY), radius: ovalRect.width / 2, startAngle: -startAngle * CGFloat(M_PI)/180, endAngle: -endAngle * CGFloat(M_PI)/180, clockwise: true)
+        ovalPath.addLine(to: CGPoint(x: ovalRect.midX, y: ovalRect.midY))
+        ovalPath.close()
 
         SnakeSegments.bodyColor.setFill()
         ovalPath.fill()
@@ -56,25 +56,25 @@ public class SnakeSegments : NSObject {
         ovalPath.lineWidth = 2
         ovalPath.stroke()
 
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawHead(open open: Bool = false, angle: CGFloat = 90, bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
+    open class func drawHead(open: Bool = false, angle: CGFloat = 90, bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
         //// Symbol Drawing
         let symbolRect = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
-        CGContextSaveGState(context)
+        context?.saveGState()
         UIRectClip(symbolRect)
-        CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y)
-        CGContextScaleCTM(context, symbolRect.size.width / 60, symbolRect.size.height / 60)
+        context?.translateBy(x: symbolRect.origin.x, y: symbolRect.origin.y)
+        context?.scaleBy(x: symbolRect.size.width / 60, y: symbolRect.size.height / 60)
 
         SnakeSegments.drawHeadSymbol(open: open, angle: angle)
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawTailSymbol(angle angle: CGFloat = 90) {
+    open class func drawTailSymbol(angle: CGFloat = 90) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
@@ -82,46 +82,46 @@ public class SnakeSegments : NSObject {
         let bodyColor2 = SnakeSegments.bodyColor.colorWithShadow(0.5)
 
         //// Polygon Drawing
-        CGContextSaveGState(context)
-        CGContextTranslateCTM(context, 30, 30)
-        CGContextRotateCTM(context, -(angle - 90) * CGFloat(M_PI) / 180)
+        context?.saveGState()
+        context?.translateBy(x: 30, y: 30)
+        context?.rotate(by: -(angle - 90) * CGFloat(M_PI) / 180)
 
         let polygonPath = UIBezierPath()
-        polygonPath.moveToPoint(CGPoint(x: 24, y: 0))
-        polygonPath.addLineToPoint(CGPoint(x: -25, y: 20.35))
-        polygonPath.addLineToPoint(CGPoint(x: -25, y: -20.35))
-        polygonPath.addLineToPoint(CGPoint(x: 24, y: 0))
-        polygonPath.closePath()
+        polygonPath.move(to: CGPoint(x: 24, y: 0))
+        polygonPath.addLine(to: CGPoint(x: -25, y: 20.35))
+        polygonPath.addLine(to: CGPoint(x: -25, y: -20.35))
+        polygonPath.addLine(to: CGPoint(x: 24, y: 0))
+        polygonPath.close()
         SnakeSegments.bodyColor.setFill()
         polygonPath.fill()
         bodyColor2.setStroke()
         polygonPath.lineWidth = 2
         polygonPath.stroke()
 
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawTail(angle angle: CGFloat = 90, bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
+    open class func drawTail(angle: CGFloat = 90, bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
         //// Symbol Drawing
         let symbolRect = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
-        CGContextSaveGState(context)
+        context?.saveGState()
         UIRectClip(symbolRect)
-        CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y)
-        CGContextScaleCTM(context, symbolRect.size.width / 60, symbolRect.size.height / 60)
+        context?.translateBy(x: symbolRect.origin.x, y: symbolRect.origin.y)
+        context?.scaleBy(x: symbolRect.size.width / 60, y: symbolRect.size.height / 60)
 
         SnakeSegments.drawTailSymbol(angle: angle)
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawFoodSymbol() {
+    open class func drawFoodSymbol() {
         //// Color Declarations
         let foodColor2 = SnakeSegments.foodColor.colorWithShadow(0.5)
 
         //// Oval Drawing
-        let ovalPath = UIBezierPath(ovalInRect: CGRect(x: 18, y: 5, width: 25, height: 25))
+        let ovalPath = UIBezierPath(ovalIn: CGRect(x: 18, y: 5, width: 25, height: 25))
         SnakeSegments.foodColor.setFill()
         ovalPath.fill()
         foodColor2.setStroke()
@@ -139,7 +139,7 @@ public class SnakeSegments : NSObject {
 
 
         //// Oval 2 Drawing
-        let oval2Path = UIBezierPath(ovalInRect: CGRect(x: 5, y: 17, width: 25, height: 25))
+        let oval2Path = UIBezierPath(ovalIn: CGRect(x: 5, y: 17, width: 25, height: 25))
         SnakeSegments.foodColor.setFill()
         oval2Path.fill()
         foodColor2.setStroke()
@@ -148,7 +148,7 @@ public class SnakeSegments : NSObject {
 
 
         //// Oval 3 Drawing
-        let oval3Path = UIBezierPath(ovalInRect: CGRect(x: 30, y: 17, width: 25, height: 25))
+        let oval3Path = UIBezierPath(ovalIn: CGRect(x: 30, y: 17, width: 25, height: 25))
         SnakeSegments.foodColor.setFill()
         oval3Path.fill()
         foodColor2.setStroke()
@@ -156,22 +156,22 @@ public class SnakeSegments : NSObject {
         oval3Path.stroke()
     }
 
-    public class func drawFood(bounds bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
+    open class func drawFood(bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
         //// Symbol Drawing
         let symbolRect = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
-        CGContextSaveGState(context)
+        context?.saveGState()
         UIRectClip(symbolRect)
-        CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y)
-        CGContextScaleCTM(context, symbolRect.size.width / 60, symbolRect.size.height / 60)
+        context?.translateBy(x: symbolRect.origin.x, y: symbolRect.origin.y)
+        context?.scaleBy(x: symbolRect.size.width / 60, y: symbolRect.size.height / 60)
 
         SnakeSegments.drawFoodSymbol()
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawBorderSymbol() {
+    open class func drawBorderSymbol() {
         //// Color Declarations
         let borderColor = UIColor(red: 0.485, green: 0.485, blue: 0.485, alpha: 1.000)
         let borderColor2 = borderColor.colorWithShadow(0.5)
@@ -185,27 +185,27 @@ public class SnakeSegments : NSObject {
         rectanglePath.stroke()
     }
 
-    public class func drawBorder(bounds bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
+    open class func drawBorder(bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
         //// Symbol Drawing
         let symbolRect = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
-        CGContextSaveGState(context)
+        context?.saveGState()
         UIRectClip(symbolRect)
-        CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y)
-        CGContextScaleCTM(context, symbolRect.size.width / 60, symbolRect.size.height / 60)
+        context?.translateBy(x: symbolRect.origin.x, y: symbolRect.origin.y)
+        context?.scaleBy(x: symbolRect.size.width / 60, y: symbolRect.size.height / 60)
 
         SnakeSegments.drawBorderSymbol()
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
-    public class func drawMiddleSymbol() {
+    open class func drawMiddleSymbol() {
         //// Color Declarations
         let bodyColor2 = SnakeSegments.bodyColor.colorWithShadow(0.5)
 
         //// Oval Drawing
-        let ovalPath = UIBezierPath(ovalInRect: CGRect(x: 5, y: 5, width: 50, height: 50))
+        let ovalPath = UIBezierPath(ovalIn: CGRect(x: 5, y: 5, width: 50, height: 50))
         SnakeSegments.bodyColor.setFill()
         ovalPath.fill()
         bodyColor2.setStroke()
@@ -213,19 +213,19 @@ public class SnakeSegments : NSObject {
         ovalPath.stroke()
     }
 
-    public class func drawMiddle(bounds bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
+    open class func drawMiddle(bounds: CGRect = CGRect(x: 0, y: 0, width: 60, height: 60)) {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
 
         //// Symbol Drawing
         let symbolRect = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
-        CGContextSaveGState(context)
+        context?.saveGState()
         UIRectClip(symbolRect)
-        CGContextTranslateCTM(context, symbolRect.origin.x, symbolRect.origin.y)
-        CGContextScaleCTM(context, symbolRect.size.width / 60, symbolRect.size.height / 60)
+        context?.translateBy(x: symbolRect.origin.x, y: symbolRect.origin.y)
+        context?.scaleBy(x: symbolRect.size.width / 60, y: symbolRect.size.height / 60)
 
         SnakeSegments.drawMiddleSymbol()
-        CGContextRestoreGState(context)
+        context?.restoreGState()
     }
 
 }
@@ -233,32 +233,32 @@ public class SnakeSegments : NSObject {
 
 
 extension UIColor {
-    func colorWithHue(newHue: CGFloat) -> UIColor {
+    func colorWithHue(_ newHue: CGFloat) -> UIColor {
         var saturation: CGFloat = 1.0, brightness: CGFloat = 1.0, alpha: CGFloat = 1.0
         self.getHue(nil, saturation: &saturation, brightness: &brightness, alpha: &alpha)
         return UIColor(hue: newHue, saturation: saturation, brightness: brightness, alpha: alpha)
     }
-    func colorWithSaturation(newSaturation: CGFloat) -> UIColor {
+    func colorWithSaturation(_ newSaturation: CGFloat) -> UIColor {
         var hue: CGFloat = 1.0, brightness: CGFloat = 1.0, alpha: CGFloat = 1.0
         self.getHue(&hue, saturation: nil, brightness: &brightness, alpha: &alpha)
         return UIColor(hue: hue, saturation: newSaturation, brightness: brightness, alpha: alpha)
     }
-    func colorWithBrightness(newBrightness: CGFloat) -> UIColor {
+    func colorWithBrightness(_ newBrightness: CGFloat) -> UIColor {
         var hue: CGFloat = 1.0, saturation: CGFloat = 1.0, alpha: CGFloat = 1.0
         self.getHue(&hue, saturation: &saturation, brightness: nil, alpha: &alpha)
         return UIColor(hue: hue, saturation: saturation, brightness: newBrightness, alpha: alpha)
     }
-    func colorWithAlpha(newAlpha: CGFloat) -> UIColor {
+    func colorWithAlpha(_ newAlpha: CGFloat) -> UIColor {
         var hue: CGFloat = 1.0, saturation: CGFloat = 1.0, brightness: CGFloat = 1.0
         self.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: nil)
         return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: newAlpha)
     }
-    func colorWithHighlight(highlight: CGFloat) -> UIColor {
+    func colorWithHighlight(_ highlight: CGFloat) -> UIColor {
         var red: CGFloat = 1.0, green: CGFloat = 1.0, blue: CGFloat = 1.0, alpha: CGFloat = 1.0
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         return UIColor(red: red * (1-highlight) + highlight, green: green * (1-highlight) + highlight, blue: blue * (1-highlight) + highlight, alpha: alpha * (1-highlight) + highlight)
     }
-    func colorWithShadow(shadow: CGFloat) -> UIColor {
+    func colorWithShadow(_ shadow: CGFloat) -> UIColor {
         var red: CGFloat = 1.0, green: CGFloat = 1.0, blue: CGFloat = 1.0, alpha: CGFloat = 1.0
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         return UIColor(red: red * (1-shadow), green: green * (1-shadow), blue: blue * (1-shadow), alpha: alpha * (1-shadow) + shadow)

@@ -120,6 +120,7 @@
 					A0997FCE1D3CDB5D00AB2AC4 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 276KGYSJ92;
+						LastSwiftMigration = 0810;
 					};
 				};
 			};
@@ -285,6 +286,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ru.geekbrains.SnakeGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -299,6 +301,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ru.geekbrains.SnakeGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

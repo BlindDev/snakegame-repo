@@ -14,13 +14,13 @@ protocol DidDrawDelegate {
 
 class GameFieldView: UIView {
     
-    private var segmentViews: [SegmentView]! = []
+    fileprivate var segmentViews: [SegmentView]! = []
     
     var delegate: DidDrawDelegate?
     
-    func renderSegments(segments: [GameSegment]){
+    func renderSegments(_ segments: [GameSegment]){
             
-        for (index, segment) in segments.enumerate() {
+        for (index, segment) in segments.enumerated() {
             
             if index == segmentViews.count {
                 
@@ -46,7 +46,7 @@ class GameFieldView: UIView {
         }
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         delegate?.viewDidDraw()
     }
@@ -64,30 +64,30 @@ class SegmentView: UIView {
         }
     }
     
-    private var open: Bool = true
+    fileprivate var open: Bool = true
     
     init(segment: GameSegment) {
         super.init(frame: segment.rect)
         
-        backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
         self.segment = segment
     }
     
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         open = !open
         
         switch segment.type {
-        case .Head:
+        case .head:
             SnakeSegments.drawHead(open: open, angle: segment.direction.rawValue, bounds: bounds)
-        case .Tail:
+        case .tail:
             SnakeSegments.drawTail(angle: segment.direction.rawValue, bounds: bounds)
-        case .Middle:
+        case .middle:
             SnakeSegments.drawMiddle(bounds: bounds)
-        case  .Food:
+        case  .food:
             SnakeSegments.drawFood(bounds: bounds)
-        case .Border:
+        case .border:
             SnakeSegments.drawBorder(bounds: bounds)
         }
     }
@@ -95,16 +95,16 @@ class SegmentView: UIView {
     
     func color() -> UIColor {
         switch segment.type {
-        case .Head:
-            return UIColor.blueColor().colorWithAlphaComponent(0.8)
-        case .Tail:
-            return UIColor.yellowColor().colorWithAlphaComponent(0.8)
-        case .Border:
-            return UIColor.grayColor()
-        case .Food:
-            return UIColor.redColor()
-        case.Middle:
-            return UIColor.greenColor().colorWithAlphaComponent(0.8)
+        case .head:
+            return UIColor.blue.withAlphaComponent(0.8)
+        case .tail:
+            return UIColor.yellow.withAlphaComponent(0.8)
+        case .border:
+            return UIColor.gray
+        case .food:
+            return UIColor.red
+        case.middle:
+            return UIColor.green.withAlphaComponent(0.8)
         }
     }
     
